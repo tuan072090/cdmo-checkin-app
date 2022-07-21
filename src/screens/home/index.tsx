@@ -1,7 +1,7 @@
-import React, {PropsWithChildren} from 'react';
+import React from 'react';
 import {SafeAreaView, Text} from 'react-native';
-import AuthTemplate from '../../component/templates/auth';
-import {useAppSelector} from '../../redux/store';
+import AuthTemplate from '@/components/templates/auth';
+import {useAppSelector} from '@/redux/store';
 
 const HomeScreen = AuthTemplate(() => {
   const {accessToken} = useAppSelector(state => state.auth);

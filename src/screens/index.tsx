@@ -8,7 +8,7 @@ import LoginScreen from './login/index';
 import React, {useRef} from 'react';
 import TabScreens from './TabScreens';
 import {ScreenName} from '../share/config/routers';
-import FloatMessage from '../component/molecules/float-message';
+import FloatMessage from '../components/molecules/float-message';
 import ShippingPlanScreen from './shipping-plan';
 
 const Stack = createNativeStackNavigator();
