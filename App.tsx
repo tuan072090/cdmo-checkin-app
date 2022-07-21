@@ -8,26 +8,26 @@
  * @format
  */
 
-import React, {type PropsWithChildren} from 'react';
+import React from 'react';
 import {extendTheme, NativeBaseProvider} from 'native-base';
 
 import {AppNavigation} from './src/screens';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store';
 
-import Colors from './src/share/index'
+import Colors from './src/share/index';
 
 const theme = extendTheme({
-  colors: Colors
+    colors: Colors,
 });
 const App = () => {
-  return (
-    <NativeBaseProvider>
-      <Provider store={store}>
-        <AppNavigation />
-      </Provider>
-    </NativeBaseProvider>
-  );
+    return (
+        <NativeBaseProvider theme={theme}>
+            <Provider store={store}>
+                <AppNavigation/>
+            </Provider>
+        </NativeBaseProvider>
+    );
 };
 
 export default App;
