@@ -1,12 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
 
 import React from 'react';
 import {extendTheme, NativeBaseProvider} from 'native-base';
@@ -18,16 +9,16 @@ import {store} from './src/redux/store';
 import Colors from './src/share/index';
 
 const theme = extendTheme({
-    colors: Colors,
+  colors: Colors,
 });
 const App = () => {
-    return (
-        <NativeBaseProvider theme={theme}>
-            <Provider store={store}>
-                <AppNavigation/>
-            </Provider>
-        </NativeBaseProvider>
-    );
+  return (
+    <NativeBaseProvider theme={theme}>
+      <Provider store={store}>
+        <AppNavigation />
+      </Provider>
+    </NativeBaseProvider>
+  );
 };
 
 export default App;
