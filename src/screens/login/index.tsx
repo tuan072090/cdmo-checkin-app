@@ -23,7 +23,7 @@ const LoginScreen = () => {
       appDispatch(UpdateUser(user));
       appDispatch(UpdateMessage('Đăng nhập thành công!'));
     } catch (err) {
-      Alert.alert('Sai tên tài khoản hoặc mật khẩu! vui lòng đăng nhập lại!');
+      // Alert.alert('Sai tên tài khoản hoặc mật khẩu! vui lòng đăng nhập lại!');
     }
   };
   return (
