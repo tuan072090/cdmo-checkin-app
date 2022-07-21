@@ -7,8 +7,7 @@ const ExcludedBearer = ['/auth/local'];
 axios.defaults.baseURL = API_URI;
 
 axios.interceptors.response.use(
-  (response: AxiosResponse<any>) => {``
-    console.log('response', response.data);
+  (response: AxiosResponse<any>) => {
     // Edit response config
     return response.data;
   },
