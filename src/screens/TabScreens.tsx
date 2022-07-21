@@ -9,9 +9,9 @@ import {ScreenName} from '../share/config/routers';
 import {
   HomeIcon,
   NotificationIcon,
-} from '../component/atoms/icons/BottomNavIcons';
-import {Typo} from '../component/atoms/typo';
-import PressBox from '../component/atoms/press-box';
+} from '../components/atoms/icons/BottomNavIcons';
+import {Typo} from '../components/atoms/typo';
+import PressBox from '../components/atoms/press-box';
 import ShippingPlanScreen from './shipping-plan';
 
 const Tab = createBottomTabNavigator();

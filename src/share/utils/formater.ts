@@ -3,20 +3,20 @@ export function FormatDayInWeek(day: string) {
 
     switch (day) {
         case "Monday":
-            return "Thứ 2";
+            return "T2";
         case "Tuesday":
-            return "Thứ 3";
+            return "T3";
 
         case "Wednesday":
-            return "Thứ 4";
+            return "T4";
         case "Thursday":
-            return "Thứ 5";
+            return "T5";
         case "Friday":
-            return "Thứ 6";
+            return "T6";
         case "Saturday":
-            return "Thứ 7";
+            return "T7";
         case "Sunday":
-            return "Chủ nhật";
+            return "CN";
         default:
              return ""
     }

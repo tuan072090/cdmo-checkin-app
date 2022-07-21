@@ -8,7 +8,7 @@ import LoginScreen from './login/index';
 import React, {useRef} from 'react';
 import TabScreens from './TabScreens';
 import {ScreenName} from '../share/config/routers';
-import FloatMessage from '../component/molecules/float-message';
+import FloatMessage from '../components/molecules/float-message';
 import ShippingPlanScreen from './shipping-plan';
 
 const Stack = createNativeStackNavigator();
@@ -18,8 +18,9 @@ export const AppNavigation = () => {
   // @ts-ignore
   const navigationRef = useRef<NavigationContainerRef | null>(null);
   const onReadyNav = function () {
-    if (!navigationRef || !navigationRef.current) return false;
-    else {
+    if (!navigationRef || !navigationRef.current) {
+      return false;
+    } else {
       return (routeNameRef.current =
         navigationRef.current.getCurrentRoute().name);
     }
@@ -50,7 +51,7 @@ export const AppNavigation = () => {
             component={LoginScreen}
             options={{headerShown: false}}
           />
-            <Stack.Screen
+          <Stack.Screen
             name={ScreenName.SHIPPING_PLAN_SCREEN}
             component={ShippingPlanScreen}
             options={{headerShown: false}}
