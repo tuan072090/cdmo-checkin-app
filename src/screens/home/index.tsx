@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
+  Button,
   Center,
   Heading,
   HStack,
@@ -14,7 +15,12 @@ import { getShippingPlanService } from "../../share/services/shipping-plan";
 import { FormatDayInWeek } from "../../share/utils/formater";
 import { Typo } from "@/components/atoms/typo";
 import AuthTemplate from "@/components/templates/auth";
-import  PressBox  from '@/components/atoms/press-box'
+import PressBox from "@/components/atoms/press-box";
+import { useAppDispatch } from "@/redux/store";
+import { Logout } from "@/redux/reducers/auth";
+import ScreenHeader from "@/components/organisms/screen-header";
+import { useNavigation } from "@react-navigation/native";
+import { ScreenName } from "@/share/config/routers";
 interface IMeta {
   pagination: {
     page: number;
@@ -25,6 +31,9 @@ interface IMeta {
 }
 
 const HomeScreen = AuthTemplate(() => {
+  const appDispatch = useAppDispatch();
+  const navigation = useNavigation();
+
   const [loading, setLoading] = useState<boolean>(true);
 
   const [plans, setPlans] = useState<any[]>([]);
@@ -63,8 +72,20 @@ const HomeScreen = AuthTemplate(() => {
       </>
     );
   };
+  const _navigationPlanDetail = (id: string | number) => {
+    // @ts-ignore
+    navigation.navigate(ScreenName.SHIPPING_PLAN_DETAIL_SCREEN, {
+      id: id,
+    });
+
+    console.log(`/${ScreenName.SHIPPING_PLAN_DETAIL_SCREEN}/${id}`);
+  };
+  const logout = () => {
+    appDispatch(Logout());
+  };
   return (
     <Center w="100%">
+      <ScreenHeader hasBackButton={false} title={"Home"}></ScreenHeader>
       {!loading && (
         <Box w="100%" background={"#FFFFFF;"}>
           <ScrollView width={"100%"} padding={3} h="auto">
@@ -72,11 +93,12 @@ const HomeScreen = AuthTemplate(() => {
               Số lượng đơn &#8226;{" "}
               {meta?.pagination.total ? meta.pagination.total : 0}
             </Heading>
-            <VStack space={2} marginBottom={30}>
+
+            <VStack space={2}>
               {plans.map((item, itemI) => (
                 <PressBox
                   key={itemI}
-                  onPress={() => console.log("I'm Pressed")}
+                  onPress={() => _navigationPlanDetail(item.id)}
                 >
                   <HStack
                     w="100%"
@@ -212,20 +234,3 @@ const HomeScreen = AuthTemplate(() => {
 });
 
 export default HomeScreen;
-
-// const styles = StyleSheet.create({
-//   card: {
-//     backgroundColor: '#FFFFFF',
-//     border: '1px solid #EDEDED',
-//     // padding:'16px'
-//   },
-//   tabActive: {
-//     flex: 2,
-//     flexDirection: 'row',
-//     backgroundColor: 'white',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     marginVertical: 10,
-//     borderRadius: 10,
-//   },
-// });

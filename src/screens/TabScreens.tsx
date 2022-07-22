@@ -19,23 +19,23 @@ const Tab = createBottomTabNavigator();
 export const TabScreens = () => {
   return (
     <Tab.Navigator
-    // screenOptions={{
-    //   unmountOnBlur: true,
-    //   headerShown: false,
-    //   tabBarShowLabel: false,
-    //   tabBarStyle: {
-    //     position: 'absolute',
-    //     bottom: 15,
-    //     marginHorizontal: 12,
-    //     paddingBottom: 0,
-    //     paddingHorizontal: 12,
-    //     height: 60,
-    //     backgroundColor: '#CDDDDF',
-    //     borderRadius: 10,
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //   },
-    // }}
+    screenOptions={{
+      unmountOnBlur: true,
+      headerShown: false,
+      tabBarShowLabel: false,
+      // tabBarStyle: {
+      //   position: 'absolute',
+      //   bottom: 15,
+      //   marginHorizontal: 12,
+      //   paddingBottom: 0,
+      //   paddingHorizontal: 12,
+      //   height: 60,
+   
+      //   borderRadius: 10,
+      //   justifyContent: 'center',
+      //   alignItems: 'center',
+      // },
+    }}
     >
       <Tab.Screen
         name={ScreenName.HOME_SCREEN}
