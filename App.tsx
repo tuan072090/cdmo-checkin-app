@@ -1,24 +1,23 @@
-
 import React from 'react';
 import {extendTheme, NativeBaseProvider} from 'native-base';
 
-import {AppNavigation} from './src/screens';
+import {AppNavigation} from '@/screens';
 import {Provider} from 'react-redux';
-import {store} from './src/redux/store';
+import {store} from '@/redux/store';
 
-import Colors from './src/share/index';
+import {Colors} from '@/share/config/colors';
 
 const theme = extendTheme({
-  colors: Colors,
+    colors: Colors,
 });
 const App = () => {
-  return (
-    <NativeBaseProvider theme={theme}>
-      <Provider store={store}>
-        <AppNavigation />
-      </Provider>
-    </NativeBaseProvider>
-  );
+    return (
+        <NativeBaseProvider theme={theme}>
+            <Provider store={store}>
+                <AppNavigation/>
+            </Provider>
+        </NativeBaseProvider>
+    );
 };
 
 export default App;
