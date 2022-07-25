@@ -1,5 +1,4 @@
 import React from 'react';
-// import {Text} from "native-base";
 import {ITextProps} from 'native-base/lib/typescript/components/primitives/Text/types';
 import {TypoTypes} from './typo.types';
 import {Text} from 'native-base';

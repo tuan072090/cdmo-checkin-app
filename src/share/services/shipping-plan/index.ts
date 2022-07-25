@@ -2,10 +2,10 @@ import axios from '@/share/axios';
 
 export const getShippingPlanService = async () => {
   try {
-    const data = await axios.get('/shipping-plans');
-    return data
+    const {data, meta}:any = await axios.get('/shipping-plans');
+
+    return {data, meta}
   } catch (err) {
-    console.log('err...', err)
     throw err
   }
 };

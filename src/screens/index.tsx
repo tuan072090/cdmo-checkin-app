@@ -1,7 +1,4 @@
-import {
-    NavigationContainer,
-    NavigationContainerRef,
-} from '@react-navigation/native';
+import {NavigationContainer, NavigationContainerRef} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './home/index';
 import LoginScreen from './login/index';
@@ -11,26 +8,24 @@ import {Deeplink, ScreenName} from '@/share/config/routers';
 import FloatMessage from '../components/molecules/float-message';
 import ShippingPlanScreen from './shipping-plan';
 import ShippingPlanDetailScreen from './shipping-plan/ShippingPlanDetail';
-import {Text} from 'native-base';
+import {Box, Spinner} from 'native-base';
+import {useAppSelector} from '@/redux/store';
 
 const Stack = createNativeStackNavigator();
 
 export const AppNavigation = () => {
-    const routeNameRef = useRef('');
-    // @ts-ignore
-    const navigationRef = useRef<NavigationContainerRef | null>(null);
+    const navigationRef = useRef<NavigationContainerRef<any> | null>(null);
+    const {accessToken} = useAppSelector(state => state.auth);
+
     const onReadyNav = function () {
-        if (!navigationRef || !navigationRef.current) {
-            return false;
-        } else {
-            return (routeNameRef.current =
-                navigationRef.current.getCurrentRoute().name);
-        }
+        //  use for tracking
     };
+
     const linking = {
         prefixes: [],
         Deeplink,
     };
+
     return (
         <>
             <FloatMessage/>
@@ -38,7 +33,7 @@ export const AppNavigation = () => {
                 ref={navigationRef}
                 onReady={onReadyNav}
                 linking={linking}
-                fallback={<Text>Loading...</Text>}
+                fallback={<Box flex={1} alignItems="center" justifyContent="center"><Spinner color="muted.500"/></Box>}
             >
                 <Stack.Navigator
                     screenOptions={{
@@ -46,33 +41,37 @@ export const AppNavigation = () => {
                         headerBackTitle: 'Trở về',
                     }}
                 >
-                    {/* Tab screens */}
-                    <Stack.Screen
-                        name={ScreenName.MAIN_SCREEN}
-                        component={TabScreens}
-                        options={{headerShown: false}}
-                    />
-                    {/* End Tab screens */}
-                    <Stack.Screen
-                        name={ScreenName.HOME_SCREEN}
-                        component={HomeScreen}
-                        options={{title: 'Home', headerShown: true}}
-                    />
-                    <Stack.Screen
-                        name={ScreenName.LOGIN_SCREEN}
-                        component={LoginScreen}
-                        options={{headerShown: false}}
-                    />
-                    <Stack.Screen
-                        name={ScreenName.SHIPPING_PLAN_SCREEN}
-                        component={ShippingPlanScreen}
-                        options={{headerShown: false}}
-                    />
-                    <Stack.Screen
-                        name={ScreenName.SHIPPING_PLAN_DETAIL_SCREEN}
-                        component={ShippingPlanDetailScreen}
-                        // options={{headerShown: false}}
-                    />
+                    {
+                        !accessToken
+                            ? <Stack.Screen
+                                name={ScreenName.LOGIN_SCREEN}
+                                component={LoginScreen}
+                                options={{headerShown: false}}
+                            />
+                            : <>
+                                <Stack.Screen
+                                    name={ScreenName.MAIN_SCREEN}
+                                    component={TabScreens}
+                                    options={{headerShown: false}}
+                                />
+                                <Stack.Screen
+                                    name={ScreenName.HOME_SCREEN}
+                                    component={HomeScreen}
+                                    options={{title: 'Home', headerShown: true}}
+                                />
+                                <Stack.Screen
+                                    name={ScreenName.SHIPPING_PLAN_SCREEN}
+                                    component={ShippingPlanScreen}
+                                    options={{headerShown: false}}
+                                />
+                                <Stack.Screen
+                                    name={ScreenName.SHIPPING_PLAN_DETAIL_SCREEN}
+                                    component={ShippingPlanDetailScreen}
+                                    options={{title: 'Shipping plan'}}
+                                />
+                            </>
+                    }
+
                 </Stack.Navigator>
             </NavigationContainer>
         </>

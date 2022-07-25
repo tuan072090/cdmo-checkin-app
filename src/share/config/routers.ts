@@ -4,6 +4,7 @@ export const ScreenName = {
   LOGIN_SCREEN: "Login",
   SHIPPING_PLAN_SCREEN: "ShippingPlan",
   SHIPPING_PLAN_DETAIL_SCREEN: "ShippingPlanDetail",
+  ACCOUNT_SCREEN: "Account"
 };
 
 export const Deeplink = {
@@ -19,5 +20,8 @@ export const Deeplink = {
         id: String,
       },
     },
+    [ScreenName.ACCOUNT_SCREEN]: {
+      path: `account`,
+    }
   },
 };

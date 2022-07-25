@@ -13,7 +13,6 @@ import {Image as ImageNative} from 'native-base';
 import {LoginService} from '@/share/services/auth';
 import {useAppDispatch} from '@/redux/store';
 import {UpdateAccessToken, UpdateUser} from '@/redux/reducers/auth';
-import {UpdateMessage} from '@/redux/reducers/message';
 import {Typo} from '@/components/atoms/typo';
 import {Alert, Platform} from 'react-native';
 
@@ -30,9 +29,9 @@ const LoginScreen = () => {
             const {jwt, user} = data;
             appDispatch(UpdateAccessToken(jwt));
             appDispatch(UpdateUser(user));
-            appDispatch(UpdateMessage('Đăng nhập thành công!'));
             setLoading(true);
         } catch (err) {
+            // @ts-ignore
             Alert.alert('Lỗi đăng nhập', err.message);
             setLoading(false);
         }
@@ -64,10 +63,7 @@ const LoginScreen = () => {
                         <Box mt={50} m={5}>
                             <Box>
                                 <Typo type="body14" fontWeight={'bold'} fontSize={'xl'}>
-                                    Chào mừng đến với
-                                </Typo>
-                                <Typo type="body16" fontWeight={'bold'} fontSize={'2xl'}>
-                                    Chợ đầu mối online
+                                    Đăng nhập Chợ Đầu Mối
                                 </Typo>
                             </Box>
                             <VStack space="2.5" mt={5}>

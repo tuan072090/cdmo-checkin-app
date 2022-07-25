@@ -1,4 +1,4 @@
-import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
+import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
 import {API_URI} from '../config/commonConfigs';
 import {store} from '@/redux/store';
 import {Logout} from '@/redux/reducers/auth';
@@ -14,17 +14,16 @@ axios.interceptors.response.use(
     },
     error => {
         const status = error.response ? error.response.status : null
-
         if (status === 401) {
             store.dispatch(Logout())
         }
-        return Promise.reject(error);
+        const customError = handleError(error)
+        return Promise.reject(customError);
     },
 );
 
 axios.interceptors.request.use(
     (config: AxiosRequestConfig<any>) => {
-        // console.log('config', config);
         if (config.url && ExcludedBearer.indexOf(config.url) === -1) {
             const accessToken = store.getState().auth.accessToken;
             //@ts-ignore
@@ -32,9 +31,26 @@ axios.interceptors.request.use(
         }
         return config;
     },
-
     error => {
-        return Promise.reject(error.response.data);
+        return Promise.reject(error.response.error);
     },
 );
+
+function handleError (error: AxiosError | any) {
+    let message = error.message || "Something error"
+    let status = 500
+    if(error.response){
+        const errorResponse = error.response.data
+
+        //  Need optimize
+        message = errorResponse.error.message
+        status = errorResponse.error.status
+    } else if (error.request) {
+        message = error.message
+    }
+
+    return {
+        message, status
+    }
+}
 export default axios;

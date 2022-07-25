@@ -1,9 +1,8 @@
 import { Text } from 'native-base';
 import React from 'react';
-import AuthTemplate from '../../components/templates/auth';
 
-const ShippingPlanScreen = AuthTemplate(() => {
+const ShippingPlanScreen = () => {
   return <Text>ShippingPlanScreen</Text>;
-});
+}
 
 export default ShippingPlanScreen;

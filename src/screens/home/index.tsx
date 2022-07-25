@@ -1,24 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {
-    Box,
-    Button,
-    Center,
-    Heading,
-    HStack,
-    Pressable,
-    ScrollView,
-    VStack,
-} from 'native-base';
+import {Box, Center, Heading, HStack, ScrollView, VStack} from 'native-base';
 import Moment from 'moment';
 
-import {getShippingPlanService} from '../../share/services/shipping-plan';
-import {FormatDayInWeek} from '../../share/utils/formater';
+import {getShippingPlanService} from '@/share/services/shipping-plan';
+import {FormatDayInWeek} from '@/share/utils/formater';
 import {Typo} from '@/components/atoms/typo';
-import AuthTemplate from '@/components/templates/auth';
 import PressBox from '@/components/atoms/press-box';
-import {useAppDispatch} from '@/redux/store';
-import {Logout} from '@/redux/reducers/auth';
-import ScreenHeader from '@/components/organisms/screen-header';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '@/share/config/routers';
 
@@ -31,8 +18,7 @@ interface IMeta {
     };
 }
 
-const HomeScreen = AuthTemplate(() => {
-    const appDispatch = useAppDispatch();
+const HomeScreen = () => {
     const navigation = useNavigation();
     const [loading, setLoading] = useState<boolean>(true);
     const [plans, setPlans] = useState<any[]>([]);
@@ -45,13 +31,11 @@ const HomeScreen = AuthTemplate(() => {
     const getShippingPlan = async () => {
         try {
             setLoading(true);
-            const data: any = await getShippingPlanService();
-            setPlans(data.data);
-
-            setMeta(data.meta);
+            const {data, meta} = await getShippingPlanService();
+            setPlans(data);
+            setMeta(meta);
             setLoading(false);
         } catch (err) {
-            console.log('err');
             setLoading(false);
         }
     };
@@ -69,24 +53,21 @@ const HomeScreen = AuthTemplate(() => {
             </>
         );
     };
+
     const _navigationPlanDetail = (id: string | number) => {
         // @ts-ignore
         navigation.navigate(ScreenName.SHIPPING_PLAN_DETAIL_SCREEN, {
             id: id,
         });
+    };
 
-        console.log(`/${ScreenName.SHIPPING_PLAN_DETAIL_SCREEN}/${id}`);
-    };
-    const logout = () => {
-        appDispatch(Logout());
-    };
     return (
         <Center w="100%" safeAreaTop>
             {!loading && (
                 <Box w="100%" background={'#FFFFFF;'}>
-                    <ScrollView width={'100%'} padding={3} h="auto">
+                    <ScrollView width={'100%'} p={3} pb={5} h="auto">
                         <Heading mb="2" size="md">
-                            Số lượng đơn &#8226;{' '}
+                            Đơn chưa giao &#8226;{' '}
                             {meta?.pagination.total ? meta.pagination.total : 0}
                         </Heading>
 
@@ -227,6 +208,6 @@ const HomeScreen = AuthTemplate(() => {
             )}
         </Center>
     );
-});
+}
 
 export default HomeScreen;

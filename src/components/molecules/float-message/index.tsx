@@ -2,8 +2,8 @@ import React, {useEffect} from "react";
 import {CheckIcon, CloseIcon, InfoIcon, WarningIcon} from "native-base";
 import {Typo} from "../../atoms/typo";
 import PressBox from "../../atoms/press-box";
-import {useAppDispatch, useAppSelector} from "../../../redux/store";
-import {UpdateMessage} from "../../../redux/reducers/message";
+import {useAppDispatch, useAppSelector} from '@/redux/store';
+import {UpdateMessage} from '@/redux/reducers/message';
 
 const FloatMessage = () => {
     const appDispatch = useAppDispatch()
