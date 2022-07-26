@@ -10,6 +10,7 @@ import ShippingPlanScreen from './shipping-plan';
 import ShippingPlanDetailScreen from './shipping-plan/ShippingPlanDetail';
 import {Box, Spinner} from 'native-base';
 import {useAppSelector} from '@/redux/store';
+import CameraScreen from '@/screens/camera';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,6 +69,11 @@ export const AppNavigation = () => {
                                     name={ScreenName.SHIPPING_PLAN_DETAIL_SCREEN}
                                     component={ShippingPlanDetailScreen}
                                     options={{title: 'Shipping plan'}}
+                                />
+                                <Stack.Screen
+                                    name={ScreenName.CAMERA_SCREEN}
+                                    component={CameraScreen}
+                                    options={{title: 'Camera', headerShown: false}}
                                 />
                             </>
                     }

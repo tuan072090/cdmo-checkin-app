@@ -8,6 +8,8 @@ import {Typo} from '@/components/atoms/typo';
 import PressBox from '@/components/atoms/press-box';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '@/share/config/routers';
+import {Alert} from 'react-native';
+import {useAppSelector} from '@/redux/store';
 
 interface IMeta {
     pagination: {
@@ -23,19 +25,25 @@ const HomeScreen = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [plans, setPlans] = useState<any[]>([]);
     const [meta, setMeta] = useState<IMeta | null>(null);
+    const {user} = useAppSelector(state => state.auth);
 
     useEffect(() => {
-        getShippingPlan();
-    }, []);
+        if(user) getShippingPlan();
+    }, [user]);
 
     const getShippingPlan = async () => {
         try {
             setLoading(true);
-            const {data, meta} = await getShippingPlanService();
+            const {data, meta} = await getShippingPlanService({
+                "filters[shipper][id][$eq]": user.id,
+                "filters[status][$eq]": "no-delivery"
+            });
             setPlans(data);
             setMeta(meta);
             setLoading(false);
         } catch (err) {
+            // @ts-ignore
+            Alert.alert(err.message)
             setLoading(false);
         }
     };
@@ -45,7 +53,7 @@ const HomeScreen = () => {
             <>
                 {status === 'delivered'
                     ? 'Đã giao hàng'
-                    : status === 'no-delivered'
+                    : status === 'no-delivery'
                         ? 'chưa giao hàng'
                         : status === 'canceled'
                             ? 'Đã hủy đơn hàng'
@@ -79,7 +87,6 @@ const HomeScreen = () => {
                                 >
                                     <HStack
                                         w="100%"
-                                        shadow={1}
                                         borderColor={'#E9ECEF'}
                                         borderWidth="1px"
                                         padding={3}
@@ -196,7 +203,7 @@ const HomeScreen = () => {
                                             >
                                                 {item.attributes.total
                                                     ? item.attributes.total
-                                                    : 'total'}
+                                                    : '...'}
                                             </Typo>
                                         </Box>
                                     </HStack>
