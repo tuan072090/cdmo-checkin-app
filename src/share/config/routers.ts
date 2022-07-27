@@ -4,6 +4,8 @@ export const ScreenName = {
   LOGIN_SCREEN: "Login",
   SHIPPING_PLAN_SCREEN: "ShippingPlan",
   SHIPPING_PLAN_DETAIL_SCREEN: "ShippingPlanDetail",
+  UPDATE_SHIPPING_PLAN_DETAIL_SCREEN: "UpdateShippingPlanDetail",
+
   ACCOUNT_SCREEN: "Account"
 };
 
@@ -16,6 +18,12 @@ export const Deeplink = {
     },
     [ScreenName.SHIPPING_PLAN_DETAIL_SCREEN]: {
       path: `ShippingPlanDetail/:id`,
+      parse: {
+        id: String,
+      },
+    },
+    [ScreenName.UPDATE_SHIPPING_PLAN_DETAIL_SCREEN]: {
+      path: `UpdateShippingPlanDetail/:id`,
       parse: {
         id: String,
       },
