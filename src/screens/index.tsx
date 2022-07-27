@@ -3,18 +3,20 @@ import {
   NavigationContainerRef,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "./home/index";
-import LoginScreen from "./login/index";
+ 
 import React, { useRef } from "react";
 import TabScreens from "./TabScreens";
 import { Deeplink, ScreenName } from "@/share/config/routers";
-import FloatMessage from "../components/molecules/float-message";
+ import { Box, Spinner } from "native-base";
+import { useAppSelector } from "@/redux/store";
+import CameraScreen from "@/screens/camera";
+import FloatMessage from "@/components/molecules/float-message";
+import LoginScreen from "./login";
+import HomeScreen from "./home";
 import ShippingPlanScreen from "./shipping-plan";
 import ShippingPlanDetailScreen from "./shipping-plan/ShippingPlanDetail";
-import { Box, Spinner } from "native-base";
-import { useAppSelector } from "@/redux/store";
 import UpdateSHippingPlanScreen from "./shipping-plan/UpdateSHippingPlan";
-
+ 
 const Stack = createNativeStackNavigator();
 
 export const AppNavigation = () => {
@@ -75,12 +77,17 @@ export const AppNavigation = () => {
               <Stack.Screen
                 name={ScreenName.SHIPPING_PLAN_DETAIL_SCREEN}
                 component={ShippingPlanDetailScreen}
-                options={{ title: "Shipping plan", headerShown: false }}
+                options={{ title: "Shipping plan" }}
               />
-                   <Stack.Screen
+              <Stack.Screen
                 name={ScreenName.UPDATE_SHIPPING_PLAN_DETAIL_SCREEN}
                 component={UpdateSHippingPlanScreen}
                 options={{ title: "Shipping plan", headerShown: false }}
+              />
+              <Stack.Screen
+                name={ScreenName.CAMERA_SCREEN}
+                component={CameraScreen}
+                options={{ title: "Camera", headerShown: false }}
               />
             </>
           )}
