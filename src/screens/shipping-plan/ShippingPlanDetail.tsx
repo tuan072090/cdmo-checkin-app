@@ -73,7 +73,7 @@ const ShippingPlanDetailScreen = ({ route }: any) => {
             <Box padding={3}>
               <MerchantDetail plan={plan} />
               <OrderDetail plan={plan} />
-              <OrderPhoto plan={plan} />
+              {/* <OrderPhoto plan={plan} /> */}
             </Box>
           )}
 

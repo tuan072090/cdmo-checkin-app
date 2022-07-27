@@ -15,7 +15,7 @@ import LoginScreen from "./login";
 import HomeScreen from "./home";
 import ShippingPlanScreen from "./shipping-plan";
 import ShippingPlanDetailScreen from "./shipping-plan/ShippingPlanDetail";
-import UpdateSHippingPlanScreen from "./shipping-plan/UpdateSHippingPlan";
+import UpdateSHippingPlanScreen from "./shipping-plan/UpdateShippingPlan";
  
 const Stack = createNativeStackNavigator();
 
@@ -84,11 +84,11 @@ export const AppNavigation = () => {
                 component={UpdateSHippingPlanScreen}
                 options={{ title: "Shipping plan", headerShown: false }}
               />
-              <Stack.Screen
+              {/* <Stack.Screen
                 name={ScreenName.CAMERA_SCREEN}
                 component={CameraScreen}
                 options={{ title: "Camera", headerShown: false }}
-              />
+              /> */}
             </>
           )}
         </Stack.Navigator>
