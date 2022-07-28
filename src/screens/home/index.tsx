@@ -64,7 +64,7 @@ const HomeScreen = () => {
 
     const _navigationPlanDetail = (id: string | number) => {
         // @ts-ignore
-        navigation.navigate(ScreenName.SHIPPING_PLAN_DETAIL_SCREEN, {
+        navigation.navigate(ScreenName.UPDATE_SHIPPING_PLAN_DETAIL_SCREEN, {
             id: id,
         });
     };

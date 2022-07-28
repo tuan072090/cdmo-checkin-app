@@ -34,11 +34,8 @@ interface Props extends ViewProps {
     minZoom: number;
     maxZoom: number;
     cameraZoom: Reanimated.SharedValue<number>;
-
     flash: 'off' | 'on';
-
     enabled: boolean;
-
     setIsPressingButton: (isPressingButton: boolean) => void;
 }
 
@@ -55,7 +52,6 @@ const _CaptureButton: React.FC<Props> = ({
                                              ...props
                                          }): React.ReactElement => {
     const pressDownDate = useRef<Date | undefined>(undefined);
-    const isRecording = useRef(false);
     const recordingProgress = useSharedValue(0);
     const takePhotoOptions = useMemo<TakePhotoOptions & TakeSnapshotOptions>(
         () => ({
@@ -85,6 +81,7 @@ const _CaptureButton: React.FC<Props> = ({
 
     //#region Tap handler
     const tapHandler = useRef<TapGestureHandler>();
+
     const onHandlerStateChanged = useCallback(
         async ({ nativeEvent: event }: TapGestureHandlerStateChangeEvent) => {
 
@@ -152,6 +149,7 @@ const _CaptureButton: React.FC<Props> = ({
         }),
         [isPressingButton],
     );
+
     const buttonStyle = useAnimatedStyle(() => {
         let scale: number;
         if (enabled) {
