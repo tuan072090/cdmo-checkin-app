@@ -1,5 +1,6 @@
 import { Typo } from "@/components/atoms/typo";
 import ScreenHeader from "@/components/organisms/screen-header";
+import CamaraDevice from "@/components/organisms/screen-header/camara-device";
 import { getShippingPlanById } from "@/share/services/shipping-plan";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -18,6 +19,7 @@ import {
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { Alert, Platform } from "react-native";
+// import CameraScreen from "../camera";
 import { ISHippingPlanDetail } from "./ShippingType";
 
 const UpdateShippingPlanScreen = ({ route }: any) => {
@@ -164,7 +166,9 @@ const UpdateShippingPlanScreen = ({ route }: any) => {
             </Stack>
           </VStack>
         </ScrollView>
+        {/* <CamaraDevice /> */}
       </Center>
+      {/* <CameraScreen /> */}
     </KeyboardAvoidingView>
   );
 };
