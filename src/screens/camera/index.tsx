@@ -49,7 +49,6 @@ const CameraScreen: React.FC = () => {
     // camera format settings
     const devices = useCameraDevices();
     const device = devices[cameraPosition];
-    const supportsCameraFlipping = useMemo(() => devices.back != null && devices.front != null, [devices.back, devices.front]);
     const supportsFlash = device?.hasFlash ?? false;
     const formats = useMemo<CameraDeviceFormat[]>(() => {
         if (device?.formats == null) {
@@ -245,11 +244,6 @@ const CameraScreen: React.FC = () => {
             />
 
             <Box style={styles.rightButtonRow}>
-                {/*{supportsCameraFlipping && (*/}
-                {/*    <Pressable style={styles.button} onPress={onFlipCameraPressed}>*/}
-                {/*        <FeatherIcon name="rotate-cw" color="white" size={24} />*/}
-                {/*    </Pressable>*/}
-                {/*)}*/}
                 {supportsFlash && (
                     <Pressable style={styles.button} onPress={onFlashPressed}>
                         <FeatherIcon name={flash === 'on' ? 'zap' : 'zap-off'} color="white" size={24} />
