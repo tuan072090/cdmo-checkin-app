@@ -11,6 +11,7 @@ import {
     sortFormats,
     useCameraDevices, useFrameProcessor, VideoFile,
 } from 'react-native-vision-camera';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 type CameraCpnProps = {
     closeCamera: () => void,
@@ -49,8 +50,22 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
         }
     }
 
-    const _uploadPhoto = () => {
+    const _uploadPhoto = async () => {
+        await launchImageLibrary({
+            mediaType: 'photo',
+            selectionLimit: 3
+        }, function (data) {
+            const {assets} = data
 
+            assets?.forEach((item) => {
+                if(item.fileSize &&  item.fileSize < 5120){
+                    Alert.alert("Dung lượng hình vượt quá 5M")
+                    return;
+                }
+                if(item.uri) onPhotoChange(item.uri)
+            })
+            closeCamera()
+        })
     }
 
     const device = devices.back
