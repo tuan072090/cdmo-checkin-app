@@ -5,10 +5,11 @@ import {AppNavigation} from '@/screens';
 import {Provider} from 'react-redux';
 import {store} from '@/redux/store';
 
-import {Colors} from '@/share/config/colors';
+// import {Colors} from '@/share/config/colors';
+import 'react-native-gesture-handler';
 
 const theme = extendTheme({
-    colors: Colors,
+    // colors: Colors,
 });
 const App = () => {
     return (
