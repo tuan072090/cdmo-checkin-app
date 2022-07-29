@@ -1,3 +1,5 @@
+import { parse, format, fromUnixTime } from 'date-fns'
+
 export function FormatDayInWeek(day: string) {
     switch (day) {
         case "Monday":
@@ -33,6 +35,22 @@ export const FormatVND = (pnumber:number) => {
 
     return result;
 };
+
+export const FormatDateFromDate = (date:Date, defaultFormat = 'dd-MM-yyyy'):string => {
+    return format(date, defaultFormat)
+}
+
+export const FormatDateFromUnixTimestamp = (unixTime:number, defaultFormat = 'dd-MM-yyyy'):string => {
+    return format(fromUnixTime(unixTime), defaultFormat)
+}
+
+export const ParseStringToDate = (dateStr:string, defaultFormat = 'yyyy-MM-dd'):Date => {
+    return parse(
+        dateStr,
+        defaultFormat,
+        new Date()
+    )
+}
 
 export const FormatPhoneNumber = (phone:string) => {
     //Filter only numbers from the input

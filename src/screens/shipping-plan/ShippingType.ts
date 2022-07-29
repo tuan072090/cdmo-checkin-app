@@ -11,6 +11,7 @@ export interface ISHippingPlanDetail {
     shipper: ISHipper;
     photos: IPhoto;
     merchant: IMerchant;
+    orderType: IOrderType
   };
 }
 
@@ -109,3 +110,6 @@ export interface IMerchant {
     };
   };
 }
+
+export type IOrderType = "deliver" | "add" | "reject"
+export type IOrderPaymentMethod = "COD" | "TRANSFER"

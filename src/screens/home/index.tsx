@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Center, Heading, HStack, ScrollView, VStack} from 'native-base';
+import {Box, Center, Heading, HStack, ScrollView, Spinner, VStack} from 'native-base';
 import Moment from 'moment';
 
 import {getShippingPlanService} from '@/share/services/shipping-plan';
@@ -71,8 +71,11 @@ const HomeScreen = () => {
 
     return (
         <Center w="100%" safeAreaTop>
+            {
+                loading && <Center w="100%" p={5}><Spinner color="black"/></Center>
+            }
             {!loading && (
-                <Box w="100%" background={'#FFFFFF;'}>
+                <Box w="100%" background={'#FFFFFF'}>
                     <ScrollView width={'100%'} p={3} pb={5} h="auto">
                         <Heading mb="2" size="md">
                             Đơn chưa giao &#8226;{' '}

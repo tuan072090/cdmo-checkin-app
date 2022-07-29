@@ -15,12 +15,15 @@ import {useAppDispatch} from '@/redux/store';
 import {UpdateAccessToken, UpdateUser} from '@/redux/reducers/auth';
 import {Typo} from '@/components/atoms/typo';
 import {Alert, Platform} from 'react-native';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import PressBox from '@/components/atoms/press-box';
 
 const LoginScreen = () => {
     const appDispatch = useAppDispatch();
     const [loading, setLoading] = useState<boolean>(false);
     const [userName, setUserName] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const _handleLogin = async () => {
         try {
@@ -82,18 +85,23 @@ const LoginScreen = () => {
                                     </Box>
                                 </Stack>
                                 <Stack>
-                                    <Box>
+                                    <Box position="relative">
                                         <Typo type="subtitle14" mb={2}>Mật khẩu:</Typo>
                                         <Input
                                             autoCapitalize="none"
                                             size="xl"
-                                            type="password"
+                                            type={showPassword ? "text" : "password"}
                                             value={password}
                                             onChangeText={(text: string) => {
                                                 setPassword(text);
                                             }}
                                             placeholder="Nhập mật khẩu"
                                         />
+                                        <PressBox onPress={() => setShowPassword(!showPassword)}
+                                                  position="absolute"
+                                                  bottom={0} right={0} p={3}>
+                                            <FeatherIcon name="eye" size={20}/>
+                                        </PressBox>
                                     </Box>
                                 </Stack>
                                 <Stack>

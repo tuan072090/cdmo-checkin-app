@@ -1,28 +1,41 @@
 import {Typo} from '@/components/atoms/typo';
-import {getShippingPlanById} from '@/share/services/shipping-plan';
+import {getShippingPlanById, updateShippingPlan} from '@/share/services/shipping-plan';
 import {useNavigation} from '@react-navigation/native';
 import {
     Box,
     Button,
     Center,
-    Checkbox,
+    Checkbox, Image,
     Input,
-    KeyboardAvoidingView, Pressable, Row, ScrollView,
+    KeyboardAvoidingView, Pressable, Radio, Row, ScrollView,
     Spinner,
     Stack,
     VStack,
 } from 'native-base';
-import React, {useEffect, useState} from 'react';
-import {Alert, Platform, StyleSheet, TouchableOpacity} from 'react-native';
-import {ISHippingPlanDetail} from './ShippingType';
+import React, {useEffect, useRef, useState} from 'react';
+import {Alert, Modal, Platform, StyleSheet, TouchableOpacity} from 'react-native';
+import {IOrderPaymentMethod, IOrderType, ISHippingPlanDetail} from './ShippingType';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import PressBox from '@/components/atoms/press-box';
+import {CameraCpn} from '@/components';
+import {uploadPhoto} from '@/share/services';
 
 const UpdateSHippingPlanScreen = ({route}: any) => {
     const navigation = useNavigation();
     const {params} = route;
-    const [orderType, setOrderType] = useState<'Giao đơn' | 'Giao bổ sung' | 'Thu hồi'>('Giao đơn');
     const [plan, setPlan] = useState<ISHippingPlanDetail | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [cameraVisible, setCameraVisible] = useState(false);
+    const [uploadedPhotos, setUploadedPhotos] = useState<any[]>([]);
+    const formData = useRef<{
+        payment: IOrderPaymentMethod,
+        total: string,
+        orderType: IOrderType
+    }>({
+        payment: 'COD',
+        total: '',
+        orderType: 'deliver',
+    });
 
     useEffect(() => {
         getShippingPlanDetail();
@@ -35,134 +48,207 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
             setPlan(data.data);
             setLoading(false);
         } catch (err) {
-            console.log(err);
-
-            Alert.alert('Lấy thông tin thất bại vui lòng thử lại');
+            // @ts-ignore
+            Alert.alert(err.message);
             setLoading(false);
         }
     };
-    const keyboardVerticalOffset = Platform.OS === 'ios' ? 20 : 0;
 
-    console.log("plan", plan)
-    if(!plan){
+    const _paymentChange = (newPayment: IOrderPaymentMethod) => {
+        formData.current.payment = newPayment
+    };
+
+    const _orderTypeChange = (newType: IOrderType) => {
+        formData.current.orderType = newType
+    };
+
+    const _orderTotalChange = (newTotal: string) => {
+        formData.current.total = newTotal
+    };
+
+    const _onPhotoChange = async (newPhoto: string) => {
+        try {
+            const data = await uploadPhoto(newPhoto);
+            const {id, url, formats} = data[0];
+            const newPhotos = [...uploadedPhotos, {
+                id, url, formats,
+            }];
+            setUploadedPhotos(newPhotos);
+        } catch (err) {
+            // @ts-ignore
+            Alert.alert('Upload error', err.message);
+        }
+    };
+
+    const _submitShippingPlan = async () => {
+        try {
+            if (!formData.current.payment || !formData.current.orderType) {
+                Alert.alert('Bạn chưa nhập đủ thông tin');
+                return;
+            }
+            if(formData.current.payment === 'COD' && (!formData.current.total || formData.current.total.length < 0)){
+                Alert.alert('Bạn phải nhập số tiền khi phương thức là Tiền mặt');
+                return;
+            }
+            const photoPayload: any[] = [];
+            uploadedPhotos.forEach(item => {
+                photoPayload.push({id: item.id});
+            });
+            const payload: any = {
+                'status': 'delivered',
+                'orderType': formData.current.orderType,
+                'payment': formData.current.payment,
+                'photos': photoPayload,
+            };
+            if (formData.current.total && formData.current.total.length > 0) {
+                payload['total'] = parseInt(formData.current.total);
+            }
+            const res = await updateShippingPlan(params.id, payload);
+            Alert.alert('Cập nhật thành công');
+            navigation.goBack();
+        } catch (err) {
+            // @ts-ignore
+            Alert.alert(err.message);
+        }
+    };
+
+    const _toggleCamera = () => {
+        setCameraVisible(!cameraVisible);
+    };
+
+    if (!plan) {
         return (
             <Box flex={1}><Spinner color="white"/></Box>
-        )
+        );
     }
-    return (
-        <KeyboardAvoidingView
-            behavior="padding"
-            keyboardVerticalOffset={keyboardVerticalOffset}
-        >
-            <ScrollView>
-                <Center w={'100%'}>
-                    <VStack space="2.5" mt={5} w={'100%'} px={5}>
-                        <Stack>
-                            <Box>
-                                <Typo type="title" mb={2}>
-                                    Phương thức thanh toán:
-                                </Typo>
-                                <Checkbox value={'order_type'} isChecked={true}>
-                                    Tiền mặt
-                                </Checkbox>
-                                <Box mt={3}>
-                                    <Checkbox value={'order_type'} isChecked={false}>
-                                        Chuyển khoản
-                                    </Checkbox>
-                                </Box>
-                            </Box>
-                            <Box>
-                                <Typo type="title" mb={2} mt={5}>
-                                    Loại đơn:
-                                </Typo>
-                                <Checkbox
-                                    value={'Giao đơn'}
-                                    // onChange={(text:string) => {
-                                    //     setOrderType(text)
-                                    // }}
-                                    isChecked={orderType === 'Giao đơn'}
-                                >
-                                    Đơn giao
-                                </Checkbox>
 
-                                <Box mt={3}>
-                                    <Checkbox
-                                        value={'Giao bổ sung'}
-                                        isChecked={orderType === 'Giao bổ sung'}
-                                    >
-                                        Đơn Bô sung
-                                    </Checkbox>
-                                </Box>
-                                <Box mt={3}>
-                                    <Checkbox
-                                        value={'Thu hồi'}
-                                        isChecked={orderType === 'Thu hồi'}
-                                    >
-                                        Thu hồi
-                                    </Checkbox>
-                                </Box>
-                            </Box>
-                            <Box mt={3}>
-                                <Typo type="title" mb={2}>
-                                    Số tiền:
-                                </Typo>
-                                <Input
-                                    keyboardType="numeric"
-                                    autoCapitalize="none"
-                                    size="xl"
-                                    // value={userName}
-                                    onChangeText={(text: string) => {
-                                        // setUserName(text);
-                                    }}
-                                    placeholder="Nhập số tiền"
-                                />
-                            </Box>
-                        </Stack>
-                        <Stack>
-                            <Box>
-                                <Typo type="subtitle14" mb={2}>
-                                    Hình ảnh:
-                                </Typo>
-                                <Row>
-                                    <TouchableOpacity style={styles.uploadBtn}>
-                                        <FeatherIcon name="upload" size={22}/>
-                                    </TouchableOpacity>
-                                </Row>
-                            </Box>
-                        </Stack>
-                        <Stack>
-                            <Button
-                                mt={15}
-                                size={'lg'}
-                                //   onPress={_handleLogin}
-                                borderRadius={12}
-                                backgroundColor={'#00875E'}
-                                disabled={loading}
-                            >
-                                {loading ? (
-                                    <Spinner color="white" accessibilityLabel="Loading"/>
-                                ) : (
-                                    'Đăng nhập'
-                                )}
-                            </Button>
-                        </Stack>
-                    </VStack>
-                </Center>
-            </ScrollView>
-        </KeyboardAvoidingView>
+    const {attributes} = plan,
+        {merchant, photos, shipper} = attributes;
+
+    return (
+        <Box flex={1} p={5} backgroundColor="white">
+            <Typo type="title" textAlign="center" mb={4}>
+                {merchant.data.attributes.name}
+            </Typo>
+            <KeyboardAvoidingView
+                behavior="padding"
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
+            >
+                <ScrollView>
+                    <Box>
+                        <Typo type="subtitle16" mb={2}>
+                            Phương thức thanh toán:
+                        </Typo>
+                        {/*@ts-ignore*/}
+                        <Radio.Group name="paymentMethod" onChange={_paymentChange}>
+                            <Radio value="COD">
+                                Tiền mặt
+                            </Radio>
+                            <Box my={2}/>
+                            <Radio value="TRANSFER">
+                                Chuyển khoản
+                            </Radio>
+                        </Radio.Group>
+                    </Box>
+                    <Box mt={3}>
+                        <Typo type="subtitle16" mb={2}>
+                            Số tiền:
+                        </Typo>
+                        <Input
+                            keyboardType="numeric"
+                            size="xl"
+                            onChangeText={_orderTotalChange}
+                            placeholder="Nhập số tiền"
+                        />
+                    </Box>
+                    <Box>
+                        <Typo type="subtitle16" mb={2} mt={5}>
+                            Loại đơn:
+                        </Typo>
+                        {/*@ts-ignore*/}
+                        <Radio.Group name="orderType" onChange={_orderTypeChange}>
+                            <Radio value="deliver">
+                                Đơn giao
+                            </Radio>
+                            <Box my={2}/>
+                            <Radio value="add">
+                                Đơn bổ sung
+                            </Radio>
+                            <Box my={2}/>
+                            <Radio value="reject">
+                                Thu hồi
+                            </Radio>
+                        </Radio.Group>
+                    </Box>
+                    <Box>
+                        <Typo type="subtitle16" my={2}>
+                            Hình ảnh:
+                        </Typo>
+                        <Row>
+                            {
+                                uploadedPhotos.map((item, index) => {
+                                    return (
+                                        <Box style={styles.thumbnailWrap} key={index}>
+                                            <Image source={{uri: item.formats.small.url}} style={styles.thumbnailImg}/>
+                                        </Box>
+                                    );
+                                })
+                            }
+                            <PressBox onPress={_toggleCamera} style={styles.uploadBtn}>
+                                <FeatherIcon name="upload" size={22}/>
+                            </PressBox>
+                        </Row>
+                    </Box>
+                    <Button
+                        mt={15}
+                        size={'lg'}
+                        onPress={_submitShippingPlan}
+                        borderRadius={12}
+                        backgroundColor={'#00875E'}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <Spinner color="white" accessibilityLabel="Loading"/>
+                        ) : (
+                            'Cập nhật'
+                        )}
+                    </Button>
+                </ScrollView>
+            </KeyboardAvoidingView>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={cameraVisible}
+                onRequestClose={_toggleCamera}
+            >
+                <CameraCpn closeCamera={_toggleCamera} onPhotoChange={_onPhotoChange}/>
+            </Modal>
+        </Box>
+
     );
 };
 
 export default UpdateSHippingPlanScreen;
 
 const styles = StyleSheet.create({
-    uploadBtn:{
+    uploadBtn: {
         width: 60,
         height: 60,
         borderWidth: 1,
         borderRadius: 7,
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: '#ccc'
-    }
-})
+        borderColor: '#ccc',
+    },
+    thumbnailWrap: {
+        width: 60,
+        height: 60,
+        borderWidth: 2,
+        borderRadius: 5,
+        borderColor: 'white',
+    },
+    thumbnailImg: {
+        width: 58,
+        height: 58,
+    },
+});

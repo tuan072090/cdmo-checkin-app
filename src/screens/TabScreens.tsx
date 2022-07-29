@@ -21,7 +21,7 @@ export const TabScreens = () => {
     return (
         <Tab.Navigator
             screenOptions={{
-                unmountOnBlur: true,
+                unmountOnBlur: false,
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {

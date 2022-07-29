@@ -84,11 +84,7 @@ export const AppNavigation = () => {
                                 component={UpdateSHippingPlanScreen}
                                 options={{title: 'Cập nhật'}}
                             />
-                            <Stack.Screen
-                                name={ScreenName.CAMERA_SCREEN}
-                                component={CameraScreen}
-                                options={{title: 'Camera', headerShown: false}}
-                            />
+
                         </>
                     )}
                 </Stack.Navigator>

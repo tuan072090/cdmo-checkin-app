@@ -1,3 +1,3 @@
-import {LoginService } from './auth'
+export {LoginService } from './auth'
+export {uploadPhoto} from './upload'
 
-export default {LoginService}

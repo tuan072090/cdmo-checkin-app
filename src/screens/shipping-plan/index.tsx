@@ -1,4 +1,4 @@
-import {Box, Center, Heading, HStack, ScrollView, Text, VStack} from 'native-base';
+import {Box, Center, Heading, HStack, ScrollView, Spinner, Text, VStack} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '@/redux/store';
@@ -67,6 +67,9 @@ const ShippingPlanScreen = () => {
 
     return (
         <Center w="100%" safeAreaTop>
+            {
+                loading && <Center w="100%" p={5}><Spinner color="black"/></Center>
+            }
             {!loading && (
                 <Box w="100%" background={'#FFFFFF;'}>
                     <ScrollView width={'100%'} p={3} pb={5} h="auto">
