@@ -9,7 +9,6 @@ import TabScreens from './TabScreens';
 import {Deeplink, ScreenName} from '@/share/config/routers';
 import {Box, Spinner} from 'native-base';
 import {useAppSelector} from '@/redux/store';
-import CameraScreen from '@/screens/camera';
 import FloatMessage from '@/components/molecules/float-message';
 import LoginScreen from './login';
 import HomeScreen from './home';
