@@ -7,7 +7,11 @@
         "ios": "react-native run-ios",
         "start": "react-native start",
         "test": "jest",
-        "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+        "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+        "ios:release": "react-native run-ios --configuration Release",
+        "build:ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
+        "build:android": "cd android && ./gradlew bundleRelease",
+        "apk": "cd android && ./gradlew assembleRelease"
     },
     "dependencies": {
         "@native-base/react-native-template": "^1.3.0",

@@ -30,7 +30,11 @@ const HomeScreen = () => {
 
         // Return the function to unsubscribe from the event so it gets removed on unmount
         return unsubscribe;
-    }, [navigation, user]);
+    }, [navigation]);
+
+    useEffect(()=>{
+        getShippingPlan();
+    },[user])
 
     const getShippingPlan = async () => {
         try {

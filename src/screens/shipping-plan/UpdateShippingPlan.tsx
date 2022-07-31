@@ -251,7 +251,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                         </Row>
                     </Box>
                     <Button
-                        mt={15}
+                        mt={25}
                         size={'lg'}
                         onPress={_submitShippingPlan}
                         borderRadius={12}
