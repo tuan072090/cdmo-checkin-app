@@ -40,11 +40,11 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
                 flash: 'auto',
                 qualityPrioritization: 'balanced'
             })
-            setIsActive(false)
             const {path} = photo
             onPhotoChange(path)
-            closeCamera()
+            _closeCamera()
         } catch (err) {
+            setIsActive(false)
             // @ts-ignore
             Alert.alert(err.message)
         }
@@ -58,14 +58,19 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
             const {assets} = data
 
             assets?.forEach((item) => {
-                if(item.fileSize &&  item.fileSize < 5120){
+                if(item.fileSize &&  item.fileSize > 5120000){
                     Alert.alert("Dung lượng hình vượt quá 5M")
                     return;
                 }
                 if(item.uri) onPhotoChange(item.uri)
             })
-            closeCamera()
+            _closeCamera()
         })
+    }
+
+    const _closeCamera = () => {
+        setIsActive(false)
+        closeCamera()
     }
 
     const device = devices.back
@@ -73,7 +78,7 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
 
     return (
         <Box flex={1} position="relative" backgroundColor="black" justifyContent="center" alignItems="center">
-            <PressBox onPress={closeCamera}
+            <PressBox onPress={_closeCamera}
                       zIndex={2}
                       shadow={1}
                       style={styles.button}
@@ -82,6 +87,10 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
             >
                 <FeatherIcon name="x" size={25}/>
             </PressBox>
+
+            {
+                cameraPermission !== 'authorized' && <Typo type="caption">Không có quyền Camera</Typo>
+            }
 
             {
                 !device && <Spinner color='white'/>

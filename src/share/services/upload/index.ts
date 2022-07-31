@@ -3,6 +3,7 @@ import {FormatDateFromDate} from '@/share/utils/formater';
 
 export const uploadPhoto = async (imgPath: string, name?: string) => {
     try {
+        console.log("imgPath....", imgPath)
         const formData = new FormData();
         const imgName = FormatDateFromDate(new Date());
         formData.append('files', {
@@ -14,6 +15,7 @@ export const uploadPhoto = async (imgPath: string, name?: string) => {
 
         return data;
     } catch (err) {
+        console.log("upload error.....", err)
         throw err;
     }
 };

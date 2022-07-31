@@ -3,7 +3,7 @@ import {Box, Spinner} from 'native-base';
 import {Typo} from '@/components/atoms/typo';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import PressBox from '@/components/atoms/press-box';
-import {Alert, StyleSheet} from 'react-native';
+import {Alert, StyleSheet, PermissionsAndroid} from 'react-native';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 
 type CameraCpnProps = {
@@ -14,19 +14,51 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
     const [isActive, setIsActive] = useState(true)
 
     useEffect(() => {
-        _openCamera()
+        setTimeout(function(){
+            requestCameraPermission()
+        },500)
     }, [])
 
+    const requestCameraPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.CAMERA,
+                {
+                    title: "App Camera Permission",
+                    message:"App needs access to your camera ",
+                    buttonNeutral: "Ask Me Later",
+                    buttonNegative: "Cancel",
+                    buttonPositive: "OK"
+                }
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                _openCamera()
+            } else {
+                Alert.alert("Bạn đã từ chối truy cập Camera")
+            }
+        } catch (err) {
+            Alert.alert("Không lấy được quyền truy cập Camera")
+        }
+    };
+
     const _openCamera = async () => {
-        console.log('open camera android....')
         await launchCamera({
             mediaType: 'photo',
-            maxWidth: 1024,
+            maxWidth: 2048,
             cameraType: 'back',
             saveToPhotos: true
         }, function(data) {
             const {assets} = data
-            console.log('data...', data)
+            console.log("assets....", assets)
+            if(assets){
+                const photo = assets[0]
+                if(photo.fileSize &&  photo.fileSize > 5120000){
+                    Alert.alert("Dung lượng hình vượt quá 5M")
+                    return;
+                }
+                if(photo.uri) onPhotoChange(photo.uri)
+                closeCamera()
+            }
         })
     }
 
@@ -38,7 +70,7 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
             const {assets} = data
 
             assets?.forEach((item) => {
-                if(item.fileSize &&  item.fileSize < 5120){
+                if(item.fileSize &&  item.fileSize > 5120000){
                     Alert.alert("Dung lượng hình vượt quá 5M")
                     return;
                 }
@@ -60,6 +92,8 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
             >
                 <FeatherIcon name="x" size={25}/>
             </PressBox>
+
+            <Typo type="body16" color="white" textAlign="center">Chụp hình mới hoặc chọn hình có sẵn từ máy</Typo>
 
 
             <PressBox onPress={_uploadPhoto}

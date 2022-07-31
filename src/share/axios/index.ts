@@ -40,11 +40,16 @@ function handleError (error: AxiosError | any) {
     let message = error.message || "Something error"
     let status = 500
     if(error.response){
-        const errorResponse = error.response.data
+        if(error.response.data){
+            const errorResponse = error.response.data
 
-        //  Need optimize
-        message = errorResponse.error.message
-        status = errorResponse.error.status
+            console.log("errorResponse....", errorResponse)
+
+            //  Need optimize
+            message = errorResponse.error.message
+            status = errorResponse.error.status
+        }
+        console.log("error.response....", {...error})
     } else if (error.request) {
         message = error.message
     }
