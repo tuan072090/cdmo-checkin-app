@@ -106,7 +106,6 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
 
             const data = await uploadPhoto(newPhoto);
 
-            console.log("data upload...", data)
             const {id, url, formats} = data[0];
             const newPhotos = [...uploadedPhotos, {
                 id, url, formats,

@@ -3,7 +3,6 @@ import {FormatDateFromDate} from '@/share/utils/formater';
 
 export const uploadPhoto = async (imgPath: string, name?: string) => {
     try {
-        console.log("imgPath....", imgPath)
         const formData = new FormData();
         const imgName = FormatDateFromDate(new Date());
         formData.append('files', {
@@ -11,7 +10,11 @@ export const uploadPhoto = async (imgPath: string, name?: string) => {
             uri: imgPath,
             type: 'image/jpg',
         });
-        const data: any = await axios.post('/upload', formData);
+        const data: any = await axios.post('/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
 
         return data;
     } catch (err) {

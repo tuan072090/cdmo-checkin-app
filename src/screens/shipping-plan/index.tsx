@@ -66,6 +66,8 @@ const ShippingPlanScreen = () => {
                                 <ShippingPlanCard shippingPlan={item} key={key}/>
                             ))}
                         </VStack>
+
+                        <Box width="100%" height={56}/>
                     </ScrollView>
                 </Box>
             )}
