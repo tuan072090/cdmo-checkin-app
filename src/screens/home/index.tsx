@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Center, Heading, ScrollView, Spinner, VStack} from 'native-base';
+import {Box, Button, Center, Heading, HStack, ScrollView, Spinner, VStack} from 'native-base';
 
 import {getShippingPlanService} from '@/share/services/shipping-plan';
 import {useNavigation} from '@react-navigation/native';
 import {Alert} from 'react-native';
 import {useAppSelector} from '@/redux/store';
 import {ShippingPlanCard} from '@/components';
+import PressBox from '@/components/atoms/press-box';
 
 interface IMeta {
     pagination: {
@@ -58,12 +59,16 @@ const HomeScreen = () => {
 
     return (
         <Box flex={1} background='#f4f4f4' safeAreaTop>
+            <HStack p={4}>
+                <Button mr={3} colorScheme="primary">Chưa giao</Button>
+                <Button variant="outline" colorScheme="gray.200">Tạo đơn mới</Button>
+            </HStack>
             {
                 loading && <Center w="100%" p={5}><Spinner color="black"/></Center>
             }
             {!loading && (
-                <ScrollView width={'100%'} p={3} pb={5} h="auto">
-                    <Heading mb="2" pt={5} size="md">
+                <ScrollView width={'100%'} p={4} pb={5} h="auto">
+                    <Heading mb="2" size="md">
                         Đơn chưa giao &#8226;{' '}
                         {meta?.pagination.total ? meta.pagination.total : 0}
                     </Heading>
