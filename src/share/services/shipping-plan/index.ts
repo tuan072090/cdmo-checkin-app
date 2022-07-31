@@ -6,6 +6,7 @@ export const getShippingPlanService = async (params: {}) => {
             params: {
                 ...params,
                 populate: '*',
+                'sort[0]': "id:DESC"
             },
         });
 

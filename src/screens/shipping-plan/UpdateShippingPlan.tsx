@@ -24,9 +24,18 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
     const navigation = useNavigation();
     const {params} = route;
     const [plan, setPlan] = useState<ISHippingPlanDetail | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [{
+        loading,
+        formLoading,
+        photoLoading,
+    }, setLoading] = useState<{ loading: boolean, photoLoading: boolean, formLoading: boolean }>({
+        loading: false,
+        formLoading: false,
+        photoLoading: false,
+    });
     const [cameraVisible, setCameraVisible] = useState(false);
     const [uploadedPhotos, setUploadedPhotos] = useState<any[]>([]);
+
     const formData = useRef<{
         payment: IOrderPaymentMethod,
         total: string,
@@ -43,38 +52,67 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
 
     const getShippingPlanDetail = async () => {
         try {
-            setLoading(true);
+            setLoading({loading: true, formLoading: false, photoLoading: false});
             const data: any = await getShippingPlanById(params.id);
-            setPlan(data.data);
-            setLoading(false);
+            const shippingPlan = data.data;
+
+            _setDefaultValue(shippingPlan);
+
+            setPlan(shippingPlan);
+            setLoading({loading: false, formLoading: false, photoLoading: false});
         } catch (err) {
             // @ts-ignore
             Alert.alert(err.message);
-            setLoading(false);
+            setLoading({loading: false, formLoading: false, photoLoading: false});
         }
     };
 
+    const _setDefaultValue = (shippingPlan: ISHippingPlanDetail) => {
+        const {photos, payment, total, orderType} = shippingPlan.attributes;
+        //  add default value
+        formData.current.payment = payment || 'COD';
+        formData.current.total = total ? total + '' : '';
+        formData.current.orderType = orderType || 'deliver';
+
+        const newPhotos: any[] = [];
+        if (photos && photos.data && photos.data.length > 0) {
+            photos.data.forEach(photo => {
+                const {id, attributes} = photo;
+                newPhotos.push({
+                    id,
+                    url: attributes.url,
+                    formats: attributes.formats,
+                });
+            });
+        }
+        setUploadedPhotos(newPhotos);
+    };
+
     const _paymentChange = (newPayment: IOrderPaymentMethod) => {
-        formData.current.payment = newPayment
+        formData.current.payment = newPayment;
     };
 
     const _orderTypeChange = (newType: IOrderType) => {
-        formData.current.orderType = newType
+        formData.current.orderType = newType;
     };
 
     const _orderTotalChange = (newTotal: string) => {
-        formData.current.total = newTotal
+        formData.current.total = newTotal;
     };
 
     const _onPhotoChange = async (newPhoto: string) => {
         try {
+            setLoading({loading: false, formLoading: false, photoLoading: true});
+
             const data = await uploadPhoto(newPhoto);
             const {id, url, formats} = data[0];
             const newPhotos = [...uploadedPhotos, {
                 id, url, formats,
             }];
             setUploadedPhotos(newPhotos);
+            setLoading({loading: false, formLoading: false,photoLoading: false});
         } catch (err) {
+            setLoading({loading: false, formLoading: false,photoLoading: false});
             // @ts-ignore
             Alert.alert('Upload error', err.message);
         }
@@ -82,14 +120,16 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
 
     const _submitShippingPlan = async () => {
         try {
+            if(formLoading) return;
             if (!formData.current.payment || !formData.current.orderType) {
                 Alert.alert('Bạn chưa nhập đủ thông tin');
                 return;
             }
-            if(formData.current.payment === 'COD' && (!formData.current.total || formData.current.total.length < 0)){
+            if (formData.current.payment === 'COD' && (!formData.current.total || formData.current.total.length < 0)) {
                 Alert.alert('Bạn phải nhập số tiền khi phương thức là Tiền mặt');
                 return;
             }
+            setLoading({loading: false, formLoading: true, photoLoading: false});
             const photoPayload: any[] = [];
             uploadedPhotos.forEach(item => {
                 photoPayload.push({id: item.id});
@@ -104,26 +144,32 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                 payload['total'] = parseInt(formData.current.total);
             }
             const res = await updateShippingPlan(params.id, payload);
+            setLoading({loading: false, formLoading: false, photoLoading: false});
+
             Alert.alert('Cập nhật thành công');
             navigation.goBack();
         } catch (err) {
+            setLoading({loading: false, formLoading: false, photoLoading: false});
             // @ts-ignore
             Alert.alert(err.message);
         }
     };
 
     const _toggleCamera = () => {
+        if (photoLoading) {
+            return;
+        }
         setCameraVisible(!cameraVisible);
     };
 
     if (!plan) {
         return (
-            <Box flex={1}><Spinner color="white"/></Box>
+            <Box flex={1} justifyContent="center" alignItems="center"><Spinner color="white"/></Box>
         );
     }
 
-    const {attributes} = plan,
-        {merchant, photos, shipper} = attributes;
+    const {attributes} = plan;
+    const {merchant, photos, shipper} = attributes;
 
     return (
         <Box flex={1} p={5} backgroundColor="white">
@@ -140,7 +186,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                             Phương thức thanh toán:
                         </Typo>
                         {/*@ts-ignore*/}
-                        <Radio.Group name="paymentMethod" onChange={_paymentChange}>
+                        <Radio.Group name="paymentMethod" defaultValue={formData.current.payment} onChange={_paymentChange}>
                             <Radio value="COD">
                                 Tiền mặt
                             </Radio>
@@ -155,6 +201,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                             Số tiền:
                         </Typo>
                         <Input
+                            defaultValue={formData.current.total}
                             keyboardType="numeric"
                             size="xl"
                             onChangeText={_orderTotalChange}
@@ -166,7 +213,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                             Loại đơn:
                         </Typo>
                         {/*@ts-ignore*/}
-                        <Radio.Group name="orderType" onChange={_orderTypeChange}>
+                        <Radio.Group name="orderType" defaultValue={formData.current.orderType} onChange={_orderTypeChange}>
                             <Radio value="deliver">
                                 Đơn giao
                             </Radio>
@@ -195,7 +242,11 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                                 })
                             }
                             <PressBox onPress={_toggleCamera} style={styles.uploadBtn}>
-                                <FeatherIcon name="upload" size={22}/>
+                                {
+                                    photoLoading ? <Spinner color="primary.500"/>
+                                        : <FeatherIcon name="camera" size={22}/>
+                                }
+
                             </PressBox>
                         </Row>
                     </Box>
@@ -207,7 +258,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                         backgroundColor={'#00875E'}
                         disabled={loading}
                     >
-                        {loading ? (
+                        {formLoading ? (
                             <Spinner color="white" accessibilityLabel="Loading"/>
                         ) : (
                             'Cập nhật'
@@ -241,13 +292,14 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
     },
     thumbnailWrap: {
-        width: 60,
-        height: 60,
-        borderWidth: 2,
-        borderRadius: 5,
+        width: 58,
+        height: 58,
+        marginRight: 5,
         borderColor: 'white',
     },
     thumbnailImg: {
+        borderRadius: 5,
+        overflow: 'hidden',
         width: 58,
         height: 58,
     },

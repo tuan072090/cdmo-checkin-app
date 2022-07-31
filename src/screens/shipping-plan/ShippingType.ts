@@ -2,20 +2,20 @@ export interface ISHippingPlanDetail {
   id: number;
   attributes: {
     status: string;
-    payment: string;
+    payment: IOrderPaymentMethod;
     total: number;
     sort: number;
     order_code: string;
     createdAt: string;
     updatedAt: string;
     shipper: ISHipper;
-    photos: IPhoto;
+    photos?: IPhotos;
     merchant: IMerchant;
-    orderType: IOrderType
+    orderType?: IOrderType
   };
 }
 
-export interface IPhoto {
+export interface IPhotos {
   data: {
     id: 2;
     attributes: {
@@ -78,7 +78,7 @@ export interface ISHipper {
     id: number;
     attributes: {
       username: string;
-      email: string;
+      email?: string;
       provider: string;
       confirmed: boolean;
       blocked: boolean;

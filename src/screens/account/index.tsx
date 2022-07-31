@@ -10,10 +10,6 @@ const AccountScreen: React.FC = () => {
     const appDispatch = useAppDispatch();
     const navigation = useNavigation()
 
-    const _openCamera = () => {
-        // @ts-ignore
-        navigation.navigate(ScreenName.CAMERA_SCREEN, {})
-    }
     const _logout = () => {
         appDispatch(Logout())
     }
@@ -21,7 +17,6 @@ const AccountScreen: React.FC = () => {
     return (
         <Box flex={1} safeAreaTop={true} alignItems='center' justifyContent='center'>
             <Typo type="title" mb={5}>Tài khoản</Typo>
-            <Button variant="outline" colorScheme="info" onPress={_openCamera}>Open Camera</Button>
             <Button onPress={_logout} mt={3}>Logout</Button>
         </Box>
     )

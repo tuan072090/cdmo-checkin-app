@@ -1,14 +1,10 @@
-import {Box, Center, Heading, HStack, ScrollView, Spinner, Text, VStack} from 'native-base';
+import {Box, Center, Heading, ScrollView, Spinner, VStack} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '@/redux/store';
 import {getShippingPlanService} from '@/share/services/shipping-plan';
 import {Alert} from 'react-native';
-import {ScreenName} from '@/share/config/routers';
-import PressBox from '@/components/atoms/press-box';
-import {Typo} from '@/components/atoms/typo';
-import {FormatDayInWeek} from '@/share/utils/formater';
-import Moment from 'moment';
+import {ShippingPlanCard} from '@/components';
 
 interface IMeta {
     pagination: {
@@ -27,11 +23,19 @@ const ShippingPlanScreen = () => {
     const {user} = useAppSelector(state => state.auth);
 
     useEffect(() => {
-        if(user) getShippingPlan();
-    }, [user]);
+        const unsubscribe = navigation.addListener('focus', () => {
+            getShippingPlan();
+        });
+
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    }, [navigation, user]);
 
     const getShippingPlan = async () => {
         try {
+            if (!user) {
+                return;
+            }
             setLoading(true);
             const {data, meta} = await getShippingPlanService({'filters[shipper][id][$eq]': user.id});
             setPlans(data);
@@ -42,27 +46,6 @@ const ShippingPlanScreen = () => {
             Alert.alert(err.message);
             setLoading(false);
         }
-    };
-
-    const formatStatus = (status: string) => {
-        return (
-            <>
-                {status === 'delivered'
-                    ? 'Đã giao hàng'
-                    : status === 'no-delivery'
-                        ? 'chưa giao hàng'
-                        : status === 'canceled'
-                            ? 'Đã hủy đơn hàng'
-                            : ''}
-            </>
-        );
-    };
-
-    const _navigationPlanDetail = (id: string | number) => {
-        // @ts-ignore
-        navigation.navigate(ScreenName.SHIPPING_PLAN_DETAIL_SCREEN, {
-            id: id,
-        });
     };
 
     return (
@@ -79,134 +62,8 @@ const ShippingPlanScreen = () => {
                         </Heading>
 
                         <VStack space={2}>
-                            {plans.map((item, itemI) => (
-                                <PressBox
-                                    key={itemI}
-                                    onPress={() => _navigationPlanDetail(item.id)}
-                                >
-                                    <HStack
-                                        w="100%"
-                                        borderColor={'#E9ECEF'}
-                                        borderWidth="1px"
-                                        padding={3}
-                                        borderRadius={'20px'}
-                                        flexDirection={'column'}
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                        space={3}
-                                        background="#FFFFFF"
-                                    >
-                                        <Box
-                                            width={'100%'}
-                                            display="flex"
-                                            flexDirection={'row'}
-                                            justifyContent={'space-between'}
-                                        >
-                                            <Typo
-                                                type="subtitle14"
-                                                width="100%"
-                                                flexShrink={1}
-                                                textAlign="left"
-                                                fontWeight={'bold'}
-                                            >
-                                                Mã đơn hàng
-                                            </Typo>
-                                            <Typo
-                                                type="subtitle14"
-                                                width="100%"
-                                                flexShrink={1}
-                                                textAlign="right"
-                                                fontWeight={'bold'}
-                                            >
-                                                #{item.attributes.order_code}
-                                            </Typo>
-                                        </Box>
-                                        <Box
-                                            width={'100%'}
-                                            display="flex"
-                                            flexDirection={'row'}
-                                            justifyContent={'space-between'}
-                                        >
-                                            <Typo
-                                                type="body14"
-                                                width="100%"
-                                                flexShrink={1}
-                                                textAlign="left"
-                                            >
-                                                Thời gian đặt hàng
-                                            </Typo>
-                                            <Typo
-                                                type="body14"
-                                                width="100%"
-                                                flexShrink={1}
-                                                textAlign="right"
-                                            >
-                                                {FormatDayInWeek(
-                                                    Moment(item.attributes.createdAt).format('dddd'),
-                                                )}{' '}
-                                                {Moment(item.attributes.createdAt).format(
-                                                    'hh:mm - MM-DD-YYYY',
-                                                )}
-                                            </Typo>
-                                        </Box>
-                                        <Box
-                                            width={'100%'}
-                                            display="flex"
-                                            flexDirection={'row'}
-                                            justifyContent={'space-between'}
-                                        >
-                                            <Typo
-                                                type="body14"
-                                                width="100%"
-                                                flexShrink={1}
-                                                textAlign="left"
-                                            >
-                                                Trạng thái đơn
-                                            </Typo>
-                                            <Typo
-                                                type="body14"
-                                                width="100%"
-                                                flexShrink={1}
-                                                color={
-                                                    item.attributes.status === 'delivered'
-                                                        ? '#006843'
-                                                        : item.attributes.status === 'canceled'
-                                                            ? '#DC3545'
-                                                            : ''
-                                                }
-                                                textAlign="right"
-                                            >
-                                                {formatStatus(item.attributes.status)}
-                                            </Typo>
-                                        </Box>
-                                        <Box
-                                            width={'100%'}
-                                            display="flex"
-                                            flexDirection={'row'}
-                                            justifyContent={'space-between'}
-                                        >
-                                            <Typo
-                                                type="body14"
-                                                width="100%"
-                                                flexShrink={1}
-                                                textAlign="left"
-                                            >
-                                                Tổng thanh toán
-                                            </Typo>
-                                            <Typo
-                                                type="body14"
-                                                width="100%"
-                                                color={'#DC3545'}
-                                                flexShrink={1}
-                                                textAlign="right"
-                                            >
-                                                {item.attributes.total
-                                                    ? item.attributes.total
-                                                    : '...'}
-                                            </Typo>
-                                        </Box>
-                                    </HStack>
-                                </PressBox>
+                            {plans.map((item, key) => (
+                                <ShippingPlanCard shippingPlan={item} key={key}/>
                             ))}
                         </VStack>
                     </ScrollView>

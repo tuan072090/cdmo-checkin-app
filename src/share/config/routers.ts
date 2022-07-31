@@ -6,7 +6,6 @@ export const ScreenName = {
   SHIPPING_PLAN_DETAIL_SCREEN: "ShippingPlanDetail",
   UPDATE_SHIPPING_PLAN_DETAIL_SCREEN: "UpdateShippingPlanDetail",
   ACCOUNT_SCREEN: "Account",
-  CAMERA_SCREEN: "Camera",
 };
 
 export const Deeplink = {
@@ -30,9 +29,6 @@ export const Deeplink = {
     },
     [ScreenName.ACCOUNT_SCREEN]: {
       path: `account`,
-    },
-    [ScreenName.CAMERA_SCREEN]: {
-      path: `camera`,
-    },
+    }
   },
 };

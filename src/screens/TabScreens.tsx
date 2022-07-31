@@ -25,6 +25,7 @@ export const TabScreens = () => {
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {
+                    elevation: 2,
                     position: 'absolute',
                     bottom: 15,
                     marginHorizontal: 12,
@@ -32,6 +33,7 @@ export const TabScreens = () => {
                     paddingHorizontal: 12,
                     height: 60,
                     borderRadius: 10,
+                    borderColor:'#e5e5e5',
                     justifyContent: 'center',
                     alignItems: 'center',
                 },

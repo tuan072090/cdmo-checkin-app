@@ -98,9 +98,11 @@ const LoginScreen = () => {
                                             placeholder="Nhập mật khẩu"
                                         />
                                         <PressBox onPress={() => setShowPassword(!showPassword)}
+                                                  width={12} height={10}
+                                                  justifyContent="center" alignItems="center"
                                                   position="absolute"
-                                                  bottom={0} right={0} p={3}>
-                                            <FeatherIcon name="eye" size={20}/>
+                                                  bottom={0} right={0}>
+                                            <FeatherIcon name={!showPassword ? "eye" : "eye-off"} size={20}/>
                                         </PressBox>
                                     </Box>
                                 </Stack>
