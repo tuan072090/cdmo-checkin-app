@@ -35,7 +35,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
         payment: 'COD',
         total: '',
         orderType: 'deliver',
-        note: ''
+        note: '',
     });
 
     useEffect(() => {
@@ -44,7 +44,6 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
 
     const getShippingPlanDetail = async () => {
         try {
-            console.log("get detail.....", params.id)
             setLoading({loading: true, formLoading: false, photoLoading: false});
             const data: any = await getShippingPlanById(params.id);
             const shippingPlan = data.data;
@@ -66,7 +65,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
         formData.current.payment = payment || 'COD';
         formData.current.total = total ? total + '' : '';
         formData.current.orderType = order_type || 'deliver';
-        formData.current.note = note || ""
+        formData.current.note = note || '';
 
         const newPhotos: any[] = [];
         if (photos && photos.data && photos.data.length > 0) {
@@ -109,9 +108,9 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                 id, url, formats,
             }];
             setUploadedPhotos(newPhotos);
-            setLoading({loading: false, formLoading: false,photoLoading: false});
+            setLoading({loading: false, formLoading: false, photoLoading: false});
         } catch (err) {
-            setLoading({loading: false, formLoading: false,photoLoading: false});
+            setLoading({loading: false, formLoading: false, photoLoading: false});
             // @ts-ignore
             Alert.alert('Upload error', err.message);
         }
@@ -119,7 +118,9 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
 
     const _submitShippingPlan = async () => {
         try {
-            if(formLoading) return;
+            if (formLoading) {
+                return;
+            }
             if (!formData.current.payment || !formData.current.orderType) {
                 Alert.alert('Bạn chưa nhập đủ thông tin');
                 return;
@@ -138,7 +139,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                 'order_type': formData.current.orderType,
                 'payment': formData.current.payment,
                 'photos': photoPayload,
-                'note': formData.current.note
+                'note': formData.current.note,
             };
             if (formData.current.total && formData.current.total.length > 0) {
                 payload['total'] = parseInt(formData.current.total);
@@ -172,8 +173,8 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
     const {merchant, photos, shipper} = attributes;
 
     return (
-        <Box flex={1} p={5} backgroundColor="white">
-            <Typo type="title" textAlign="center" mb={4}>
+        <Box flex={1} py={5} backgroundColor="white">
+            <Typo type="title" textAlign="center" mb={2}>
                 {merchant.data.attributes.name}
             </Typo>
             <KeyboardAvoidingView
@@ -181,7 +182,10 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
             >
                 <ScrollView>
-                    <Box>
+                    <Box px={5}>
+                        <Typo textAlign="center" numberOfLines={3} type="body16" color="orange.500" fontStyle="italic" mb={4}>
+                            {merchant.data.attributes.note}
+                        </Typo>
                         <Typo type="subtitle16" mb={2}>
                             Phương thức thanh toán:
                         </Typo>
@@ -196,7 +200,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                             </Radio>
                         </Radio.Group>
                     </Box>
-                    <Box mt={3}>
+                    <Box mt={3} px={5}>
                         <Typo type="subtitle16" mb={2}>
                             Số tiền:
                         </Typo>
@@ -208,7 +212,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                             placeholder="Nhập số tiền"
                         />
                     </Box>
-                    <Box>
+                    <Box px={5}>
                         <Typo type="subtitle16" mb={2} mt={5}>
                             Loại đơn:
                         </Typo>
@@ -227,7 +231,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                             </Radio>
                         </Radio.Group>
                     </Box>
-                    <Box>
+                    <Box px={5}>
                         <Typo type="subtitle16" my={2}>
                             Hình ảnh:
                         </Typo>
@@ -236,7 +240,8 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                                 uploadedPhotos.map((item, index) => {
                                     return (
                                         <Box style={styles.thumbnailWrap} key={index}>
-                                            <Image source={{uri: item.formats.thumbnail.url}} style={styles.thumbnailImg}/>
+                                            <Image source={{uri: item.formats.thumbnail.url}}
+                                                   style={styles.thumbnailImg}/>
                                         </Box>
                                     );
                                 })
@@ -250,28 +255,29 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                             </PressBox>
                         </Row>
                     </Box>
-                    <Box>
+                    <Box  px={5}>
                         <Typo type="subtitle16" mb={2} mt={5}>
                             Ghi chú:
                         </Typo>
                         {/*@ts-ignore*/}
-                        <TextArea onChangeText={_orderNoteChange} h={20} w="100%"  placeholder="Text Area Placeholder" defaultValue={formData.current.note}/>
+                        <TextArea onChangeText={_orderNoteChange} h={20} w="100%" placeholder="nhập ghi chú nếu có"
+                                  defaultValue={formData.current.note}/>
                     </Box>
-                    <Button
-                        mt={25}
-                        size={'lg'}
-                        onPress={_submitShippingPlan}
-                        borderRadius={12}
-                        backgroundColor={'#00875E'}
-                        disabled={loading}
-                    >
-                        {formLoading ? (
-                            <Spinner color="white" accessibilityLabel="Loading"/>
-                        ) : (
-                            'Cập nhật'
-                        )}
-                    </Button>
-                    <Box w={25} h={20}/>
+                    <Box px={5} mt={5} mb={24}>
+                        <Button
+                            size={'lg'}
+                            onPress={_submitShippingPlan}
+                            borderRadius={12}
+                            backgroundColor={'#00875E'}
+                            disabled={loading}
+                        >
+                            {formLoading ? (
+                                <Spinner color="white" accessibilityLabel="Loading"/>
+                            ) : (
+                                'Cập nhật'
+                            )}
+                        </Button>
+                    </Box>
                 </ScrollView>
             </KeyboardAvoidingView>
             <Modal

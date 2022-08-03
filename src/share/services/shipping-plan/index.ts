@@ -34,7 +34,6 @@ export const getShippingPlanById = async (id: string | number) => {
 
 export const updateShippingPlan = async (id: string | number, payload: any) => {
     try {
-        console.log('payload is.......', payload)
         const data = await axios.put('/shipping-plans/' + id, {
             data: payload
         });
