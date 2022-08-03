@@ -1,19 +1,9 @@
 import {Typo} from '@/components/atoms/typo';
 import {getShippingPlanById, updateShippingPlan} from '@/share/services/shipping-plan';
 import {useNavigation} from '@react-navigation/native';
-import {
-    Box,
-    Button,
-    Center,
-    Checkbox, Image,
-    Input,
-    KeyboardAvoidingView, Pressable, Radio, Row, ScrollView,
-    Spinner,
-    Stack,
-    VStack,
-} from 'native-base';
+import {Box, Button, Image, Input, KeyboardAvoidingView, Radio, Row, ScrollView, Spinner, TextArea} from 'native-base';
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, Modal, Platform, StyleSheet, TouchableOpacity} from 'react-native';
+import {Alert, Modal, Platform, StyleSheet} from 'react-native';
 import {IOrderPaymentMethod, IOrderType, ISHippingPlanDetail} from './ShippingType';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import PressBox from '@/components/atoms/press-box';
@@ -39,11 +29,13 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
     const formData = useRef<{
         payment: IOrderPaymentMethod,
         total: string,
-        orderType: IOrderType
+        orderType: IOrderType,
+        note: string
     }>({
         payment: 'COD',
         total: '',
         orderType: 'deliver',
+        note: ''
     });
 
     useEffect(() => {
@@ -52,6 +44,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
 
     const getShippingPlanDetail = async () => {
         try {
+            console.log("get detail.....", params.id)
             setLoading({loading: true, formLoading: false, photoLoading: false});
             const data: any = await getShippingPlanById(params.id);
             const shippingPlan = data.data;
@@ -68,11 +61,12 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
     };
 
     const _setDefaultValue = (shippingPlan: ISHippingPlanDetail) => {
-        const {photos, payment, total, orderType} = shippingPlan.attributes;
+        const {photos, payment, total, order_type, note} = shippingPlan.attributes;
         //  add default value
         formData.current.payment = payment || 'COD';
         formData.current.total = total ? total + '' : '';
-        formData.current.orderType = orderType || 'deliver';
+        formData.current.orderType = order_type || 'deliver';
+        formData.current.note = note || ""
 
         const newPhotos: any[] = [];
         if (photos && photos.data && photos.data.length > 0) {
@@ -98,6 +92,10 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
 
     const _orderTotalChange = (newTotal: string) => {
         formData.current.total = newTotal;
+    };
+
+    const _orderNoteChange = (newNote: string) => {
+        formData.current.note = newNote;
     };
 
     const _onPhotoChange = async (newPhoto: string) => {
@@ -137,9 +135,10 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
             });
             const payload: any = {
                 'status': 'delivered',
-                'orderType': formData.current.orderType,
+                'order_type': formData.current.orderType,
                 'payment': formData.current.payment,
                 'photos': photoPayload,
+                'note': formData.current.note
             };
             if (formData.current.total && formData.current.total.length > 0) {
                 payload['total'] = parseInt(formData.current.total);
@@ -237,7 +236,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                                 uploadedPhotos.map((item, index) => {
                                     return (
                                         <Box style={styles.thumbnailWrap} key={index}>
-                                            <Image source={{uri: item.formats.small.url}} style={styles.thumbnailImg}/>
+                                            <Image source={{uri: item.formats.thumbnail.url}} style={styles.thumbnailImg}/>
                                         </Box>
                                     );
                                 })
@@ -250,6 +249,13 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
 
                             </PressBox>
                         </Row>
+                    </Box>
+                    <Box>
+                        <Typo type="subtitle16" mb={2} mt={5}>
+                            Ghi chú:
+                        </Typo>
+                        {/*@ts-ignore*/}
+                        <TextArea onChangeText={_orderNoteChange} h={20} w="100%"  placeholder="Text Area Placeholder" defaultValue={formData.current.note}/>
                     </Box>
                     <Button
                         mt={25}
@@ -265,6 +271,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                             'Cập nhật'
                         )}
                     </Button>
+                    <Box w={25} h={20}/>
                 </ScrollView>
             </KeyboardAvoidingView>
             <Modal

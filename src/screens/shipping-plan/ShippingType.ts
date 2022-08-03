@@ -1,17 +1,18 @@
 export interface ISHippingPlanDetail {
   id: number;
   attributes: {
-    status: string;
+    status: string
     payment: IOrderPaymentMethod;
-    total: number;
-    sort: number;
-    order_code: string;
-    createdAt: string;
-    updatedAt: string;
-    shipper: ISHipper;
-    photos?: IPhotos;
-    merchant: IMerchant;
-    orderType?: IOrderType
+    total: number
+    sort: number
+    note?: string
+    order_code: string
+    createdAt: string
+    updatedAt: string
+    shipper: ISHipper
+    photos?: IPhotos
+    merchant: IMerchant
+    order_type?: IOrderType
   };
 }
 
