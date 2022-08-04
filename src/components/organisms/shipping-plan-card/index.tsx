@@ -17,7 +17,7 @@ const ShippingPlanCard: React.FC<ShippingPlanCardProps> = ({shippingPlan}) => {
 
     const _navigationPlanDetail = () => {
         // @ts-ignore
-        navigation.navigate(ScreenName.UPDATE_SHIPPING_PLAN_DETAIL_SCREEN, {
+        navigation.navigate(ScreenName.UPDATE_SHIPPING_PLAN_SCREEN, {
             id: shippingPlan.id,
         });
     }

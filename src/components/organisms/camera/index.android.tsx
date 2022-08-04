@@ -16,7 +16,7 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
     useEffect(() => {
         setTimeout(function(){
             requestCameraPermission()
-        },500)
+        },200)
     }, [])
 
     const requestCameraPermission = async () => {
@@ -49,7 +49,6 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
             saveToPhotos: true
         }, function(data) {
             const {assets} = data
-            console.log("assets....", assets)
             if(assets){
                 const photo = assets[0]
                 if(photo.fileSize &&  photo.fileSize > 5120000){
@@ -101,7 +100,7 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
                       shadow={1}
                       style={styles.button}
                       position="absolute"
-                      bottom={3} left={4}
+                      bottom={4} left={4}
             >
                 <FeatherIcon name="image" size={25}/>
             </PressBox>
@@ -111,7 +110,7 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
                       shadow={1}
                       style={styles.button}
                       position="absolute"
-                      bottom={3}
+                      bottom={4}
             >
                 <FeatherIcon name={isActive ? "camera" : 'refresh-ccw'} size={25}/>
             </PressBox>

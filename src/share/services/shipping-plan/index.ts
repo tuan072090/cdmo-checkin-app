@@ -1,7 +1,7 @@
 import axios from '@/share/axios';
 import {store} from '@/redux/store';
 
-export const getShippingPlanService = async (params: {}) => {
+export const getShippingPlans = async (params: {}) => {
     try {
         const {data, meta}: any = await axios.get('/shipping-plans', {
             params: {
@@ -35,6 +35,17 @@ export const getShippingPlanById = async (id: string | number) => {
 export const updateShippingPlan = async (id: string | number, payload: any) => {
     try {
         const data = await axios.put('/shipping-plans/' + id, {
+            data: payload
+        });
+        return data;
+    } catch (err) {
+        throw err;
+    }
+};
+
+export const createShippingPlan = async (payload: any) => {
+    try {
+        const {data} = await axios.post('/shipping-plans', {
             data: payload
         });
         return data;

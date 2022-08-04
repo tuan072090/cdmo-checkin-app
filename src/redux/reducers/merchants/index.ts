@@ -1,10 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 export type MerchantsType = {
-    merchants: any[]
+    merchants: any[],
+    merchantsSelected: any[]
 };
 const initialState: MerchantsType = {
-    merchants: []
+    merchants: [],
+    merchantsSelected: []
 };
 
 export const merchantsSlice = createSlice({
@@ -14,9 +16,12 @@ export const merchantsSlice = createSlice({
         UpdateMerchants: (state, action) => {
             state.merchants = action.payload;
         },
+        UpdateMerchantsSelected: (state, action) => {
+            state.merchantsSelected = action.payload;
+        },
     },
 });
 
-export const {UpdateMerchants} = merchantsSlice.actions;
+export const {UpdateMerchants, UpdateMerchantsSelected} = merchantsSlice.actions;
 
 export default merchantsSlice.reducer;

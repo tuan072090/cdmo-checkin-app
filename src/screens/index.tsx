@@ -13,8 +13,8 @@ import FloatMessage from '@/components/molecules/float-message';
 import LoginScreen from './login';
 import HomeScreen from './home';
 import ShippingPlanScreen from './shipping-plan';
-import ShippingPlanDetailScreen from './shipping-plan/ShippingPlanDetail';
 import UpdateSHippingPlanScreen from './shipping-plan/UpdateShippingPlan';
+import CreateShippingPlan from '@/screens/shipping-plan/CreateShippingPlan';
 
 const Stack = createNativeStackNavigator();
 
@@ -74,16 +74,15 @@ export const AppNavigation = () => {
                                 options={{headerShown: false}}
                             />
                             <Stack.Screen
-                                name={ScreenName.SHIPPING_PLAN_DETAIL_SCREEN}
-                                component={ShippingPlanDetailScreen}
-                                options={{title: 'Shipping plan'}}
+                                name={ScreenName.UPDATE_SHIPPING_PLAN_SCREEN}
+                                component={UpdateSHippingPlanScreen}
+                                options={{title: 'Cập nhật đơn hàng'}}
                             />
                             <Stack.Screen
-                                name={ScreenName.UPDATE_SHIPPING_PLAN_DETAIL_SCREEN}
-                                component={UpdateSHippingPlanScreen}
-                                options={{title: 'Cập nhật'}}
+                                name={ScreenName.CREATE_SHIPPING_PLAN_SCREEN}
+                                component={CreateShippingPlan}
+                                options={{title: 'Tạo mới đơn hàng'}}
                             />
-
                         </>
                     )}
                 </Stack.Navigator>

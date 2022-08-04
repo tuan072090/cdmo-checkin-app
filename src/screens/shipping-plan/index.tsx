@@ -2,7 +2,7 @@ import {Box, Center, Heading, ScrollView, Spinner, VStack} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '@/redux/store';
-import {getShippingPlanService} from '@/share/services/shipping-plan';
+import {getShippingPlans} from '@/share/services/shipping-plan';
 import {Alert} from 'react-native';
 import {ShippingPlanCard} from '@/components';
 
@@ -37,7 +37,7 @@ const ShippingPlanScreen = () => {
                 return;
             }
             setLoading(true);
-            const {data, meta} = await getShippingPlanService({'filters[shipper][id][$eq]': user.id});
+            const {data, meta} = await getShippingPlans({'filters[shipper][id][$eq]': user.id});
             setPlans(data);
             setMeta(meta);
             setLoading(false);

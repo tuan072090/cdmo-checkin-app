@@ -83,7 +83,7 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
                       shadow={1}
                       style={styles.button}
                       position="absolute"
-                      top={5} left={3}
+                      top={6} left={3}
             >
                 <FeatherIcon name="x" size={25}/>
             </PressBox>
@@ -111,7 +111,7 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
                       shadow={1}
                       style={styles.button}
                       position="absolute"
-                      bottom={3} left={4}
+                      bottom={5} left={4}
             >
                 <FeatherIcon name="image" size={25}/>
             </PressBox>
@@ -121,7 +121,7 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
                       shadow={1}
                       style={styles.button}
                       position="absolute"
-                      bottom={3}
+                      bottom={5}
             >
                 <FeatherIcon name={isActive ? "camera" : 'refresh-ccw'} size={25}/>
             </PressBox>

@@ -1,10 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Center, Heading, ScrollView, Spinner, VStack} from 'native-base';
+import {Box, Center, Heading, HStack, ScrollView, Spinner, VStack} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '@/redux/store';
-import {getShippingPlanService} from '@/share/services/shipping-plan';
+import {getShippingPlans} from '@/share/services/shipping-plan';
 import {Alert} from 'react-native';
 import {ShippingPlanCard} from '@/components';
+import PressBox from '@/components/atoms/press-box';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import {Colors} from '@/share/config/colors';
+import {Typo} from '@/components/atoms/typo';
 
 interface IMeta {
     pagination: {
@@ -24,7 +28,7 @@ const NotDeliveryList: React.FC = () => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            getShippingPlan();
+            _getShippingPlans();
         });
 
         // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -32,16 +36,16 @@ const NotDeliveryList: React.FC = () => {
     }, [navigation]);
 
     useEffect(()=>{
-        getShippingPlan();
+        _getShippingPlans();
     },[user])
 
-    const getShippingPlan = async () => {
+    const _getShippingPlans = async () => {
         try {
             if (!user) {
                 return;
             }
             setLoading(true);
-            const {data, meta} = await getShippingPlanService({
+            const {data, meta} = await getShippingPlans({
                 'filters[shipper][id][$eq]': user.id,
                 'filters[status][$eq]': 'no-delivery',
             });
@@ -58,23 +62,29 @@ const NotDeliveryList: React.FC = () => {
 
     return (
         <Box w="100%">
-            {
-                loading && <Center w="100%" p={5}><Spinner color="black"/></Center>
-            }
-            {!loading && (
-                <ScrollView width={'100%'} p={4} pb={5} h="auto">
-                    <Heading mb="2" size="md">
+            <ScrollView width={'100%'} p={4} pb={5} h="auto">
+                <HStack mb="2" alignItems="center">
+                    <Typo type="title">
                         Đơn chưa giao &#8226;{' '}
                         {meta?.pagination.total ? meta.pagination.total : 0}
-                    </Heading>
+                    </Typo>
+                    {
+                        !loading && <PressBox onPress={_getShippingPlans} p={3}>
+                            <FeatherIcon name="refresh-ccw" size={25} color={Colors.primary['500']}/>
+                        </PressBox>
+                    }
+                </HStack>
 
-                    <VStack space={2}>
-                        {plans.map((item, key) => (
-                            <ShippingPlanCard shippingPlan={item} key={key}/>
-                        ))}
-                    </VStack>
-                </ScrollView>
-            )}
+                <VStack space={2}>
+                    {
+                        loading && <Center w="100%" p={5}><Spinner color="black"/></Center>
+                    }
+                    {plans && plans.map((item, key) => (
+                        <ShippingPlanCard shippingPlan={item} key={key}/>
+                    ))}
+                </VStack>
+                <Box w="100%" h={48}/>
+            </ScrollView>
         </Box>
     )
 }

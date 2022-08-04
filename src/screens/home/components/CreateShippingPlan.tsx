@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, HStack, Spinner} from 'native-base';
+import {Box, HStack, Input, Spinner} from 'native-base';
 import {getAllMerchants} from '@/share/services';
 import {Typo} from '@/components/atoms/typo';
 import {Alert, FlatList, ScrollView} from 'react-native';
@@ -8,20 +8,22 @@ import {useAppDispatch, useAppSelector} from '@/redux/store';
 import {UpdateMerchants} from '@/redux/reducers/merchants';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import {Colors} from '@/share/config/colors';
+import {useNavigation} from '@react-navigation/native';
+import {ScreenName} from '@/share/config/routers';
 
 const CreateShippingPlan: React.FC = () => {
+    const navigation = useNavigation()
     const {merchants} = useAppSelector(state => state.merchants);
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        if(merchants && merchants.length === 0) {
-            _fetchAllMerchant()
+        if (merchants && merchants.length === 0) {
+            _fetchAllMerchant();
         }
-    },[])
+    }, []);
 
     const _fetchAllMerchant = async () => {
-        console.log("fetch all merchants")
         try {
             setLoading(true);
             const res = await getAllMerchants();
@@ -33,11 +35,25 @@ const CreateShippingPlan: React.FC = () => {
         }
     };
 
+    const _navToCreateShippingPlan = (id:string|number) => {
+        // @ts-ignore
+        navigation.navigate(ScreenName.CREATE_SHIPPING_PLAN_SCREEN, {merchantId: id})
+    };
+
     // @ts-ignore
     const _renderItem = ({item}) => {
         return (
-            <PressBox px={5} py={3} backgroundColor="white" borderBottomWidth={1} borderBottomColor="gray.200">
-                <Typo type="subtitle14">{item.attributes.name}</Typo>
+            <PressBox onPress={() => _navToCreateShippingPlan(item.id)}
+                      px={5} py={3}
+                      flexDir="row" justifyContent="space-between" alignItems="center"
+                      backgroundColor="white"
+                      borderBottomWidth={1}
+                      borderBottomColor="gray.200">
+                <Box>
+                    <Typo type="subtitle14">{item.attributes.name}</Typo>
+                    <Typo type="caption">{item.attributes.address}</Typo>
+                </Box>
+                <FeatherIcon name="arrow-right" size={20} color="#9e9e9e"/>
             </PressBox>
         );
     };
@@ -45,7 +61,7 @@ const CreateShippingPlan: React.FC = () => {
     return (
         <Box w="100%">
             <HStack px={5} mb={5} alignItems="center">
-                <Typo type="title">Chọn cửa hàng</Typo>
+                <Input placeholder="chọn cửa hàng" size="xl" w="80%"/>
                 {
                     !loading && <PressBox onPress={_fetchAllMerchant} p={3}>
                         <FeatherIcon name="refresh-ccw" size={25} color={Colors.primary['500']}/>

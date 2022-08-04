@@ -37,3 +37,12 @@ export const getMerchants = async (offset= 0) => {
         throw err
     }
 }
+
+export const getMerchantDetail = async (id: number|string) => {
+    try {
+        const {data, meta}: any = await axios.get(`/merchants/${id}`);
+        return data
+    } catch (err) {
+        throw err
+    }
+}
