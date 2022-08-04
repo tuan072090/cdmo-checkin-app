@@ -62,7 +62,7 @@ const CreateShippingPlan: React.FC = () => {
     // @ts-ignore
     const _renderItem = ({item}) => {
         return (
-            <PressBox onPress={() => _navToCreateShippingPlan(item.id)}
+            <PressBox onPress={() => _navToCreateShippingPlan(item.id)} key={item.id}
                       px={5} py={3}
                       flexDir="row" justifyContent="space-between" alignItems="center"
                       backgroundColor="white"
