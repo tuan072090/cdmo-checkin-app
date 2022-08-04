@@ -10,11 +10,13 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import {Colors} from '@/share/config/colors';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '@/share/config/routers';
+import {RemoveAscent} from '@/share/utils/formater';
 
 const CreateShippingPlan: React.FC = () => {
     const navigation = useNavigation()
     const {merchants} = useAppSelector(state => state.merchants);
     const dispatch = useAppDispatch();
+    const [searchResults, setSearchResults] = useState<any[]>([])
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -34,6 +36,23 @@ const CreateShippingPlan: React.FC = () => {
             Alert.alert(err.message);
         }
     };
+
+    const _onSearchMerchant = (text: string) => {
+        if(text.length > 1){
+            //  find text
+            const results = merchants.filter(mer => {
+                if(!mer.attributes.name) return false;
+
+                const textSearch = RemoveAscent(text)
+                // @ts-ignore
+                return RemoveAscent(mer.attributes.name).includes(textSearch)
+            });
+            //  only get first 5 results
+            setSearchResults(results.slice(0, 5))
+        }else {
+            setSearchResults([])
+        }
+    }
 
     const _navToCreateShippingPlan = (id:string|number) => {
         // @ts-ignore
@@ -61,7 +80,7 @@ const CreateShippingPlan: React.FC = () => {
     return (
         <Box w="100%">
             <HStack px={5} mb={5} alignItems="center">
-                <Input placeholder="chọn cửa hàng" size="xl" w="80%"/>
+                <Input onChangeText={_onSearchMerchant} placeholder="Chọn cửa hàng" size="xl" w="80%"/>
                 {
                     !loading && <PressBox onPress={_fetchAllMerchant} p={3}>
                         <FeatherIcon name="refresh-ccw" size={25} color={Colors.primary['500']}/>
@@ -70,6 +89,16 @@ const CreateShippingPlan: React.FC = () => {
             </HStack>
             {
                 loading && <Spinner mt={5} color="primary.500"/>
+            }
+            {
+                searchResults.length > 0 && <Box mb={5}>
+                    <Typo type="subtitle14" px={5} py={3}>Kết Quả</Typo>
+                    {searchResults.map((mer, index) => {
+                        return _renderItem({item: mer})
+                    }) }
+
+
+                </Box>
             }
             <FlatList
                 data={merchants}

@@ -77,7 +77,7 @@ const NotDeliveryList: React.FC = () => {
 
                 <VStack space={2}>
                     {
-                        loading && <Center w="100%" p={5}><Spinner color="black"/></Center>
+                        loading && <Center w="100%" p={5}><Spinner color="primary.500"/></Center>
                     }
                     {plans && plans.map((item, key) => (
                         <ShippingPlanCard shippingPlan={item} key={key}/>

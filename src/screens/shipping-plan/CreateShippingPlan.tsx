@@ -142,7 +142,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
 
     if (!merchantData) {
         return (
-            <Box flex={1} justifyContent="center" alignItems="center"><Spinner color="white"/></Box>
+            <Box flex={1} justifyContent="center" alignItems="center"><Spinner color="primary.500"/></Box>
         );
     }
 
