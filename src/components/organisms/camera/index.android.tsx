@@ -51,8 +51,8 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
             const {assets} = data
             if(assets){
                 const photo = assets[0]
-                if(photo.fileSize &&  photo.fileSize > 5120000){
-                    Alert.alert("Dung lượng hình vượt quá 5M")
+                if(photo.fileSize &&  photo.fileSize > 10000000){
+                    Alert.alert("Dung lượng hình vượt quá 10M")
                     return;
                 }
                 if(photo.uri) onPhotoChange(photo.uri)
@@ -69,8 +69,8 @@ const CameraCpn: React.FC<CameraCpnProps> = ({closeCamera, onPhotoChange}) => {
             const {assets} = data
 
             assets?.forEach((item) => {
-                if(item.fileSize &&  item.fileSize > 5120000){
-                    Alert.alert("Dung lượng hình vượt quá 5M")
+                if(item.fileSize &&  item.fileSize > 10000000){
+                    Alert.alert("Dung lượng hình vượt quá 10M")
                     return;
                 }
                 if(item.uri) onPhotoChange(item.uri)

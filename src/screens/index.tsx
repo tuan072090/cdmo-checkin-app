@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator();
 
 export const AppNavigation = () => {
     const navigationRef = useRef<NavigationContainerRef<any> | null>(null);
-    const {accessToken} = useAppSelector((state) => state.auth);
+    const {accessToken, user} = useAppSelector((state) => state.auth);
 
     const onReadyNav = function () {
         //  use for tracking

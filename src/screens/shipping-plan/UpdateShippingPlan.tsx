@@ -173,18 +173,27 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
     const {merchant, photos, shipper} = attributes;
 
     return (
-        <Box flex={1} py={5} backgroundColor="white">
-            <Typo type="title" textAlign="center" mb={2}>
-                {merchant.data.attributes.name}
-            </Typo>
+        <Box flex={1} pb={5} backgroundColor="white">
             <KeyboardAvoidingView
                 behavior="padding"
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
             >
                 <ScrollView>
+                    <Typo type="title" textAlign="center" mt={5} mb={2}>
+                        {merchant.data.attributes.name}
+                    </Typo>
                     <Box px={5}>
-                        <Typo textAlign="center" numberOfLines={3} type="body16" color="orange.500" fontStyle="italic" mb={4}>
-                            {merchant.data.attributes.note}
+                        <Typo numberOfLines={3} type="body16" color="orange.500" fontStyle="italic" mb={4}>
+                            {"Ghi chú: "+merchant.data.attributes.note}
+                        </Typo>
+                        <Typo numberOfLines={3} type="body16" color="orange.500" fontStyle="italic" mb={4}>
+                            {"Cách giao: "+merchant.data.attributes.how}
+                        </Typo>
+                        <Typo type="body16" color="orange.500" fontStyle="italic" mb={4}>
+                            {"Liên hệ: "+merchant.data.attributes.contact_name}
+                        </Typo>
+                        <Typo type="body16" color="orange.500" fontStyle="italic" mb={4}>
+                            {"Điện thoại: "+merchant.data.attributes.contact_phone}
                         </Typo>
                         <Typo type="subtitle16" mb={2}>
                             Phương thức thanh toán:

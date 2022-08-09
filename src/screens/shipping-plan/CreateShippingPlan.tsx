@@ -147,19 +147,27 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
     }
 
     return (
-        <Box flex={1} py={5} backgroundColor="white">
-            <Typo type="title" textAlign="center" mb={2}>
-                {merchantData.attributes.name}
-            </Typo>
+        <Box flex={1} pb={5} backgroundColor="white">
             <KeyboardAvoidingView
                 behavior="padding"
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
             >
                 <ScrollView>
+                    <Typo type="title" textAlign="center" mt={5} mb={2}>
+                        {merchantData.attributes.name}
+                    </Typo>
                     <Box px={5}>
-                        <Typo textAlign="center" numberOfLines={3} type="body16" color="orange.500" fontStyle="italic"
-                              mb={4}>
-                            {merchantData.attributes.note}
+                        <Typo numberOfLines={3} type="body16" color="orange.500" fontStyle="italic" mb={4}>
+                            {"Ghi chú: "+merchantData.attributes.note}
+                        </Typo>
+                        <Typo numberOfLines={3} type="body16" color="orange.500" fontStyle="italic" mb={4}>
+                            {"Cách giao: "+merchantData.attributes.how}
+                        </Typo>
+                        <Typo type="body16" color="orange.500" fontStyle="italic" mb={4}>
+                            {"Liên hệ: "+merchantData.attributes.contact_name}
+                        </Typo>
+                        <Typo type="body16" color="orange.500" fontStyle="italic" mb={4}>
+                            {"Điện thoại: "+merchantData.attributes.contact_phone}
                         </Typo>
                         <Typo type="subtitle16" mb={2}>
                             Phương thức thanh toán:
