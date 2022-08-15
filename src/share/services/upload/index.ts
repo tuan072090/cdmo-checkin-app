@@ -18,7 +18,6 @@ export const uploadPhoto = async (imgPath: string, name?: string) => {
 
         return data;
     } catch (err) {
-        console.log("upload error.....", err)
         throw err;
     }
 };

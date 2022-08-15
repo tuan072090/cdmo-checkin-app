@@ -80,7 +80,7 @@ const ShippingPlanSelectMerchant: React.FC = () => {
     return (
         <Box w="100%">
             <HStack px={5} mb={5} alignItems="center">
-                <Input onChangeText={_onSearchMerchant} placeholder="Chọn cửa hàng" size="xl" w="80%"/>
+                <Input bgColor="white" onChangeText={_onSearchMerchant} placeholder="Chọn cửa hàng" size="xl" w="80%"/>
                 {
                     !loading && <PressBox onPress={_fetchAllMerchant} p={3}>
                         <FeatherIcon name="refresh-ccw" size={25} color={Colors.primary['500']}/>

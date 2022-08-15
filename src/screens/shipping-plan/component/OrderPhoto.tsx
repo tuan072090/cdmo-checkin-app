@@ -5,8 +5,6 @@ import {Image as ImageNative} from 'native-base';
 
 const OrderPhoto = ({plan}: any) => {
 
-    console.log('plan...', plan);
-
     return (
         <>
             <Box

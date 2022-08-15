@@ -31,12 +31,14 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
         payment: IOrderPaymentMethod,
         total: string,
         orderType: IOrderType,
-        note: string
+        note: string,
+        status: string
     }>({
         payment: 'COD',
         total: '',
         orderType: 'deliver',
         note: '',
+        status: 'no-delivery'
     });
 
     useEffect(() => {
@@ -61,11 +63,12 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
     };
 
     const _setDefaultValue = (shippingPlan: ISHippingPlanDetail) => {
-        const {photos, payment, total, order_type, note} = shippingPlan.attributes;
+        const {photos, payment, total, order_type, note, status} = shippingPlan.attributes;
         //  add default value
         formData.current.payment = payment || 'COD';
         formData.current.total = total ? total + '' : '';
         formData.current.orderType = order_type || 'deliver';
+        formData.current.status = status || 'no-delivery';
         formData.current.note = note || '';
 
         const newPhotos: any[] = [];
@@ -88,6 +91,10 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
 
     const _orderTypeChange = (newType: IOrderType) => {
         formData.current.orderType = newType;
+    };
+
+    const _orderStatusChange = (newStatus: string) => {
+        formData.current.status = newStatus;
     };
 
     const _orderTotalChange = (newTotal: string) => {
@@ -136,7 +143,7 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                 photoPayload.push({id: item.id});
             });
             const payload: any = {
-                'status': 'delivered',
+                'status': formData.current.status,
                 'order_type': formData.current.orderType,
                 'payment': formData.current.payment,
                 'photos': photoPayload,
@@ -254,6 +261,31 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                         </Radio.Group>
                     </Box>
                     <Box px={5}>
+                        <Typo type="subtitle16" mb={2} mt={5}>
+                            Trạng thái:
+                        </Typo>
+                        {/*@ts-ignore*/}
+                        <Radio.Group name="orderStatus" defaultValue={formData.current.status} onChange={_orderStatusChange}>
+                            {
+                                attributes.status !== 'delivered' &&  <>
+                                    <Radio value="no-delivery">
+                                        Chưa giao
+                                    </Radio><Box my={2}/>
+                                </>
+                            }
+
+                            <Radio value="delivered">
+                                Đã giao
+                            </Radio>
+                            <Box my={2}/>
+                            {
+                                attributes.status !== 'delivered' &&  <Radio value="canceled">
+                                    Huỷ
+                                </Radio>
+                            }
+                        </Radio.Group>
+                    </Box>
+                    <Box px={5} mt={4}>
                         <Typo type="subtitle16" my={2}>
                             Hình ảnh:
                         </Typo>

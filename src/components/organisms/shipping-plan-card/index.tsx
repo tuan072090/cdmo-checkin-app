@@ -116,9 +116,7 @@ const ShippingPlanCard: React.FC<ShippingPlanCardProps> = ({shippingPlan}) => {
                         color={
                             attributes.status === 'delivered'
                                 ? Colors.primary['500']
-                                : attributes.status === 'canceled'
-                                    ? '#DC3545'
-                                    : ''
+                                : 'red.500'
                         }
                         textAlign="right"
                     >
@@ -158,12 +156,12 @@ function formatStatus(status: string){
     return (
         <>
             {status === 'delivered'
-                ? 'Đã giao hàng'
+                ? 'Đã giao'
                 : status === 'no-delivery'
-                    ? 'chưa giao hàng'
+                    ? 'Chưa giao'
                     : status === 'canceled'
-                        ? 'Đã hủy đơn hàng'
-                        : ''}
+                        ? 'Đã hủy'
+                        : 'Khác'}
         </>
     );
 };
