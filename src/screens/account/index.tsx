@@ -4,7 +4,7 @@ import {Typo} from '@/components/atoms/typo';
 import {useAppDispatch, useAppSelector} from '@/redux/store';
 import {Logout} from '@/redux/reducers/auth';
 import {useNavigation} from '@react-navigation/native';
-import {APP_VERSION} from '@/share/config/commonConfigs';
+import {APP_BUILD_NUMBER, APP_VERSION} from '@/share/config/commonConfigs';
 
 const AccountScreen: React.FC = () => {
     const appDispatch = useAppDispatch();
@@ -22,6 +22,7 @@ const AccountScreen: React.FC = () => {
             <Button onPress={_logout} mt={3}>Logout</Button>
 
             <Typo type="caption" mt={3}>Version {APP_VERSION}</Typo>
+            <Typo type="caption" mt={2}>Build {APP_BUILD_NUMBER}</Typo>
         </Box>
     )
 }

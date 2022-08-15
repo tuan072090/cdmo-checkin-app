@@ -5,6 +5,7 @@ import {useAppSelector} from '@/redux/store';
 import {getShippingPlans} from '@/share/services/shipping-plan';
 import {Alert} from 'react-native';
 import {ShippingPlanCard} from '@/components';
+import {Colors} from '@/share/config/colors';
 
 interface IMeta {
     pagination: {
@@ -50,27 +51,24 @@ const ShippingPlanScreen = () => {
 
     return (
         <Center w="100%" safeAreaTop>
-            {
-                loading && <Center w="100%" p={5}><Spinner color="black"/></Center>
-            }
-            {!loading && (
-                <Box w="100%" background={'#FFFFFF;'}>
-                    <ScrollView width={'100%'} p={3} pb={5} h="auto">
-                        <Heading mb="2" size="md">
-                            Tổng đơn hàng &#8226;{' '}
-                            {meta?.pagination.total ? meta.pagination.total : 0}
-                        </Heading>
+            <Box w="100%" background={'#FFFFFF;'}>
+                <ScrollView width={'100%'} p={3} pb={5} h="auto">
+                    <Heading mb="2" size="md">
+                        Tổng đơn hàng &#8226;{' '}
+                        {meta?.pagination.total ? meta.pagination.total : 0}
+                    </Heading>
+                    {
+                        loading && <Center w="100%" p={5}><Spinner color={Colors.primary['500']}/></Center>
+                    }
+                    <VStack space={2}>
+                        {plans.map((item, key) => (
+                            <ShippingPlanCard shippingPlan={item} key={key}/>
+                        ))}
+                    </VStack>
 
-                        <VStack space={2}>
-                            {plans.map((item, key) => (
-                                <ShippingPlanCard shippingPlan={item} key={key}/>
-                            ))}
-                        </VStack>
-
-                        <Box width="100%" height={56}/>
-                    </ScrollView>
-                </Box>
-            )}
+                    <Box width="100%" height={56}/>
+                </ScrollView>
+            </Box>
         </Center>
     );
 };
