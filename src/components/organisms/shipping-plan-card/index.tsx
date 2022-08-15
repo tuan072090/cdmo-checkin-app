@@ -4,7 +4,7 @@ import {Typo} from '@/components/atoms/typo';
 import {FormatDayInWeek, FormatVND} from '@/share/utils/formater';
 import Moment from 'moment';
 import PressBox from '@/components/atoms/press-box';
-import {ISHippingPlanDetail} from '@/screens/shipping-plan/ShippingType';
+import {ISHippingPlanDetail} from '@/screens/shipping-plan/shippingPlan.types';
 import {useNavigation} from '@react-navigation/native';
 import {Colors} from '@/share/config/colors';
 import {ScreenName} from '@/share/config/routers';

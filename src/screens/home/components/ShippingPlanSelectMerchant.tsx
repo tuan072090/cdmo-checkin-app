@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ScreenName} from '@/share/config/routers';
 import {RemoveAscent} from '@/share/utils/formater';
 
-const CreateShippingPlan: React.FC = () => {
+const ShippingPlanSelectMerchant: React.FC = () => {
     const navigation = useNavigation()
     const {merchants} = useAppSelector(state => state.merchants);
     const dispatch = useAppDispatch();
@@ -110,4 +110,4 @@ const CreateShippingPlan: React.FC = () => {
     );
 };
 
-export default CreateShippingPlan;
+export default ShippingPlanSelectMerchant;

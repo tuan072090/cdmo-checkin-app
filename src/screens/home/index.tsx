@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Box, Button, HStack} from 'native-base';
 import NotDeliveryList from '@/screens/home/components/NotDeliveryList';
-import CreateShippingPlan from '@/screens/home/components/CreateShippingPlan';
+import ShippingPlanSelectMerchant from '@/screens/home/components/ShippingPlanSelectMerchant';
 import {Typo} from '@/components/atoms/typo';
 
 const HomeScreen = () => {
@@ -25,7 +25,7 @@ const HomeScreen = () => {
                 display === 'list' && <NotDeliveryList/>
             }
             {
-                display === 'create' && <CreateShippingPlan/>
+                display === 'create' && <ShippingPlanSelectMerchant/>
             }
         </Box>
     );

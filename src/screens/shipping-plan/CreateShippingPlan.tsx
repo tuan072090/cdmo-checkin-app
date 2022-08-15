@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Box, Button, Image, Input, KeyboardAvoidingView, Radio, Row, ScrollView, Spinner, TextArea} from 'native-base';
 import React, {useEffect, useRef, useState} from 'react';
 import {Alert, Modal, Platform, StyleSheet} from 'react-native';
-import {IOrderPaymentMethod, IOrderType, ISHippingPlanDetail} from './ShippingType';
+import {IOrderPaymentMethod, IOrderType, ISHippingPlanDetail} from './shippingPlan.types';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import PressBox from '@/components/atoms/press-box';
 import {CameraCpn} from '@/components';
@@ -12,6 +12,7 @@ import {uploadPhoto} from '@/share/services';
 import {getMerchantDetail} from '@/share/services/merchants';
 import {ScreenName} from '@/share/config/routers';
 import {useAppSelector} from '@/redux/store';
+import {makeAPhoneCall} from '@/share/utils/phoneCall';
 
 const UpdateSHippingPlanScreen = ({route}: any) => {
     const navigation = useNavigation();
@@ -140,6 +141,17 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
         setCameraVisible(!cameraVisible);
     };
 
+    const _callMerchant = (phone:string) => {
+        try {
+            if(phone && phone.length > 0){
+                makeAPhoneCall(phone)
+            }
+        }catch (err) {
+            // @ts-ignore
+            Alert.alert(err.message)
+        }
+    }
+
     if (!merchantData) {
         return (
             <Box flex={1} justifyContent="center" alignItems="center"><Spinner color="primary.500"/></Box>
@@ -166,8 +178,9 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                         <Typo type="body16" color="orange.500" fontStyle="italic" mb={4}>
                             {"Liên hệ: "+merchantData.attributes.contact_name}
                         </Typo>
-                        <Typo type="body16" color="orange.500" fontStyle="italic" mb={4}>
-                            {"Điện thoại: "+merchantData.attributes.contact_phone}
+                        <Typo onPress={() => _callMerchant(merchantData.attributes.contact_phone)} type="body16" color="orange.500" fontStyle="italic" mb={4}>
+                            {"Điện thoại: "}
+                            <Typo type="body16" underline>{merchantData.attributes.contact_phone}</Typo>
                         </Typo>
                         <Typo type="subtitle16" mb={2}>
                             Phương thức thanh toán:

@@ -4,11 +4,12 @@ import {useNavigation} from '@react-navigation/native';
 import {Box, Button, Image, Input, KeyboardAvoidingView, Radio, Row, ScrollView, Spinner, TextArea} from 'native-base';
 import React, {useEffect, useRef, useState} from 'react';
 import {Alert, Modal, Platform, StyleSheet} from 'react-native';
-import {IOrderPaymentMethod, IOrderType, ISHippingPlanDetail} from './ShippingType';
+import {IOrderPaymentMethod, IOrderType, ISHippingPlanDetail} from './shippingPlan.types';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import PressBox from '@/components/atoms/press-box';
 import {CameraCpn} from '@/components';
 import {uploadPhoto} from '@/share/services';
+import {makeAPhoneCall} from '@/share/utils/phoneCall';
 
 const UpdateSHippingPlanScreen = ({route}: any) => {
     const navigation = useNavigation();
@@ -156,6 +157,17 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
         }
     };
 
+    const _callMerchant = (phone:string) => {
+        try {
+            if(phone && phone.length > 0){
+                makeAPhoneCall(phone)
+            }
+        }catch (err) {
+            // @ts-ignore
+            Alert.alert(err.message)
+        }
+    }
+
     const _toggleCamera = () => {
         if (photoLoading) {
             return;
@@ -192,8 +204,9 @@ const UpdateSHippingPlanScreen = ({route}: any) => {
                         <Typo type="body16" color="orange.500" fontStyle="italic" mb={4}>
                             {"Liên hệ: "+merchant.data.attributes.contact_name}
                         </Typo>
-                        <Typo type="body16" color="orange.500" fontStyle="italic" mb={4}>
-                            {"Điện thoại: "+merchant.data.attributes.contact_phone}
+                        <Typo onPress={() => _callMerchant(merchant.data.attributes.contact_phone)} type="body16" color="orange.500" fontStyle="italic" mb={4}>
+                            {"Điện thoại: "}
+                            <Typo type="body16" underline>{merchant.data.attributes.contact_phone}</Typo>
                         </Typo>
                         <Typo type="subtitle16" mb={2}>
                             Phương thức thanh toán:
